@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">The Kudos Club</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+
+    <!-- Navigation Drawer menu labels -->
+    <string name="nav_home">Home</string>
+
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>Home</item>
+        <item>My Profile</item>
+        <item>Team Members</item>
+        <item>Search Team</item>
+        <item>Notice</item>
+        <item>Video Vault</item>
+        <item>Most Nominated</item>
+        <item>Recent Recognition</item>
+        <item>Support</item>
+        <item>Logout</item>
+    </string-array>
+
+    <string name="activity_title_about_us">About Us</string>
+    <string name="activity_title_programme_overview">Programme Overview</string>
+    <string name="activity_title_privacy_policy">Privacy Policy</string>
+    <string name="action_clear_all">Clear All</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_mark_all_read">Mark All as Read</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="recognize_detail_info">
+
+You can recognise your colleagues for living our values and going the extra mile.\n\n
+
+There are 180 units of Kudos Points per quarter that you can award to colleagues in recognition of their extraordinary work. Nominee will receive an email letting them know they were recognised and the nomination will also appear on the time wall for other colleagues to like or comment.\n\n
+
+Kudos Points fills up the recipient’s Recognition Pillar and earn them time off work. As soon as the Recognition Pillar is 100% complete, the user can avail one day off, via the usual leave management process.\n\n
+
+The budget of Kudos Points to award colleagues resets every quarter so make sure you spend them before you lose them! There is no flexibility on this\n\n
+
+Spending Kudos Points\n\n
+Please note there is no cap on how many extra days off an employee can earn. However, the maximum number of days you can redeem in a year is two, so bear this in mind if you want to roll some reward over to the next year. You can either redeem the days off immediately via your regular leave tool or roll them over to the following year. Any days which have been rolled over from the previous year will expire at the end of the current year.\n\n
+Any Kudos Points earned under Recognise pillar cannot be encashed or exchanged or transferred for the online catalogue.
+
+    </string>
+
+
+    <string name="content_my_kudos">For each pillar you achieve 100%, the Kudos Club will reward you with 100 Kudos Points to redeem against your catalogue.\nFurthermore, complete more pillars to grow your KudosBank balance!\n</string>
+
+    <string name="content_team_kudos">Here you can see how your functional team is doing – some colleagues may need a bit of motivation! Also check out the Ranking section to see where you team currently stands. Note that points collected in team challenges go straight into your individual Kudos Bank.</string>
+
+    <string name="challenge_info">The Kudos Club rewards you for getting involved.\n\nBy completing challenges you can fill up our Value pillars. Once a pillar is full, you earn yourself Kudos Points to spend in our online reward catalogue. The challenges are split between Easy, Medium and Difficult, depending on the amount of time involved. You can also choose between taking a challenge yourself or work with your team.\n\nThe challenges show the % of that Value Pillar you will fill once you complete the activity, so go on; pick a few now that you will commit to do, and good luck.</string>
+
+</resources>

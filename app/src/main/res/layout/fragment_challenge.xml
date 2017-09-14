@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBg">
+
+
+    <TextView
+        android:id="@+id/tv_no_record_found"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="@dimen/_24sdp"
+        android:text="No Record Found"
+        android:textSize="@dimen/_24sdp"
+        android:visibility="gone" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_challenges"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:divider="@null"
+        android:orientation="vertical"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+
+    <View
+        android:id="@+id/view_white_blur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#BF000000"
+        android:visibility="gone" />
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/multiple_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        fab:fab_addButtonColorNormal="@color/colorPrimary"
+        fab:fab_addButtonColorPressed="@color/colorPrimary"
+        fab:fab_addButtonPlusIconColor="@color/colorWhite"
+        fab:fab_labelStyle="@style/menu_labels_style">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_suggest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/tab_background_selected"
+            fab:fab_colorPressed="@color/tab_background_selected"
+            fab:fab_size="mini"
+            fab:fab_title="SUGGEST A CHALLENGE" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_transparency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/logo_transparency"
+            android:scaleType="fitXY"
+            android:src="@drawable/logo_transparency"
+            app:fab_size="mini"
+            fab:fab_title="TRANSPARENCY" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_collaboration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/logo_collaboration"
+            android:scaleType="fitXY"
+            android:src="@drawable/logo_collaboration"
+            app:fab_size="mini"
+            fab:fab_title="COLLABORATION" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_dynamic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/logo_dynamic"
+            android:scaleType="fitXY"
+            android:src="@drawable/logo_dynamic"
+            app:fab_size="mini"
+            fab:fab_colorNormal="@color/white"
+            fab:fab_colorPressed="@color/white_pressed"
+            fab:fab_title="DYNAMIC" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_ownership"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/logo_ownership"
+            android:scaleType="fitXY"
+            android:src="@drawable/logo_ownership"
+            app:fab_size="mini"
+            fab:fab_title="OWNERSHIP" />
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+</RelativeLayout>

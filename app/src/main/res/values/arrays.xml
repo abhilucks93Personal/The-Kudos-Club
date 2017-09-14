@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="users_list">
+        <item>Gab Lopez</item>
+        <item>Flip Gabor (E3097)</item>
+        <item>Flip Pavlov (E3142)</item>
+        <item>Gabriel Friedrich</item>
+        <item>Thirumala Gabu</item>
+        <item>Gab Lopez</item>
+        <item>John Appleseeds</item>
+        <item>Paul Walker</item>
+    </string-array>
+
+
+    <string-array name="post_filter_type">
+        <item>All</item>
+        <item>Collaboration</item>
+        <item>Dynamic</item>
+        <item>Exceptional</item>
+        <item>Ownership</item>
+        <item>Recognition</item>
+        <item>Transparency</item>
+    </string-array>
+
+    <string-array name="challenge_filter_level">
+        <item>Select Level</item>
+        <item>Individual</item>
+        <item>Team</item>
+        <item>Manager</item>
+    </string-array>
+
+    <string-array name="challenge_filter_type">
+        <item>Select Type</item>
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
+
+
+    <string-array name="post_filter_country">
+        <item>United Kingdom</item>
+    </string-array>
+
+    <string-array name="recognize_reason">
+        <item>Great Reason</item>
+        <item>Great Teamwork</item>
+        <item>Great customer service</item>
+        <item>Made a difference</item>
+    </string-array>
+</resources>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_programme_overview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:drawableRight="@drawable/arrow_setting"
+        android:padding="@dimen/_14sdp"
+        android:text="Programme Overview"
+        android:textColor="@color/colorBlack" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:background="@color/color_light_grey" />
+
+    <TextView
+        android:id="@+id/tv_programme_t_c"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:drawableRight="@drawable/arrow_setting"
+        android:padding="@dimen/_14sdp"
+        android:text="Programme T&amp;C"
+        android:textColor="@color/colorBlack" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:background="@color/color_light_grey" />
+
+    <TextView
+        android:id="@+id/tv_faq"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:drawableRight="@drawable/arrow_setting"
+        android:padding="@dimen/_14sdp"
+        android:text="FAQ"
+        android:textColor="@color/colorBlack" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:background="@color/color_light_grey" />
+
+    <TextView
+        android:id="@+id/tv_contact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:drawableRight="@drawable/arrow_setting"
+        android:padding="@dimen/_14sdp"
+        android:text="Contact Us"
+        android:textColor="@color/colorBlack" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:background="@color/color_light_grey" />
+
+
+</LinearLayout>
