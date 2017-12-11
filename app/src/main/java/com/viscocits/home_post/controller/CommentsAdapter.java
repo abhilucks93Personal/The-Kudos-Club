@@ -1,10 +1,7 @@
-package com.viscocits.home_post;
+package com.viscocits.home_post.controller;
 
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +11,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.viscocits.R;
+import com.viscocits.home_post.model.ModelCommentsData;
+import com.viscocits.home_post.model.postModels.ModelPostComments;
 import com.viscocits.other.CircleTransform;
+import com.viscocits.utils.Utility;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import java.util.List;
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyViewHolder> {
 
     private Activity context;
-    private List<ModelCommentsData> commentsDataList;
+    private List<ModelPostComments> commentsDataList;
     private int mLayoutResourceId;
 
 
@@ -45,7 +45,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
     }
 
 
-    public CommentsAdapter(Activity context, int mLayoutResourceId, List<ModelCommentsData> commentsDataList) {
+    public CommentsAdapter(Activity context, int mLayoutResourceId, List<ModelPostComments> commentsDataList) {
         this.commentsDataList = commentsDataList;
         this.mLayoutResourceId = mLayoutResourceId;
         this.context = context;
@@ -63,17 +63,17 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        final ModelCommentsData commentsData = commentsDataList.get(position);
+        final ModelPostComments commentsData = commentsDataList.get(position);
 
 
-        holder.tvName.setText(commentsData.getUserName());
+        holder.tvName.setText(commentsData.getName());
 
-        holder.tvComment.setText(commentsData.getCommentMsg());
+        holder.tvComment.setText(commentsData.getMessage());
 
-        holder.tvDuration.setText(commentsData.getCommentTime());
+        holder.tvDuration.setText(Utility.getFormattedPostDate(commentsData.getCommentedDate()));
 
 
-        Glide.with(context).load(commentsData.getUserImage())
+        Glide.with(context).load(commentsData.getAvatarExt())
                 .crossFade()
                 .thumbnail(0.5f)
                 .error(R.drawable.image_thumb)

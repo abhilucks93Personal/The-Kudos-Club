@@ -18,7 +18,6 @@
             android:id="@+id/ll_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPostTypeOwnership"
             android:orientation="horizontal"
             android:padding="@dimen/_8sdp">
 

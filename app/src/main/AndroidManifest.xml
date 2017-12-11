@@ -6,14 +6,13 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/kudos_app_icon"
+        android:icon="@drawable/avinityalive_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
         <activity
             android:name=".utils.SplashActivity"
-            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
@@ -52,6 +51,7 @@
         <activity
             android:name=".home_challenge.AddChallengeActivity"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".utils.zoom.ZoomMultiImageClass" />
     </application>
 
 </manifest>

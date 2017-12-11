@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.viscocits.home_challenge.ChallengeFragment;
 import com.viscocits.home_kudos.KudosBankFragment;
-import com.viscocits.home_post.PostFragment;
+import com.viscocits.home_post.view.PostFragment;
 import com.viscocits.home_recognize.RecognizeFragment;
 import com.viscocits.sample.BlankFragment;
 
@@ -75,13 +75,13 @@ public class ProfilePagerAdapter extends FragmentStatePagerAdapter {
                 return "Post";
 
             case 1:
-                return "Recognize";
+                return "Recognise";
 
             case 2:
                 return "Challenges";
 
             case 3:
-                return "Kudos Bank";
+                return "Bank";
 
             default:
                 return null;

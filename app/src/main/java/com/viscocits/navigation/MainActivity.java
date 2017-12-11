@@ -82,9 +82,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Utility.addPreferences(this, Constants.keyUserId, "216");
+        Utility.addPreferences(this, Constants.keyUniqueDeviceId, "uniqueDeviceId");
+        Utility.addPreferences(this, Constants.keyDeviceId, "DeviceId");
+
         findViewById();
 
         initUi(savedInstanceState);
+
 
     }
 
@@ -313,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
 
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.hamburger, getTheme());
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.sidebar_navigation, getTheme());
 
         actionBarDrawerToggle.setHomeAsUpIndicator(drawable);
         actionBarDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {

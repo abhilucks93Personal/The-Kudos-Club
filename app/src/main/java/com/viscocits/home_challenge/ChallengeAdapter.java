@@ -66,7 +66,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.MyVi
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        // final ModelPostData postData = postDataList.get(position);
+        // final ModelResponseWallPostData postData = postDataList.get(position);
 
         if (position == (count - 1)) {
             holder.fab.setVisibility(View.INVISIBLE);

@@ -43,8 +43,12 @@ import android.widget.Toast;
 
 
 import com.viscocits.R;
-import com.viscocits.home_post.ModelCommentsData;
-import com.viscocits.home_post.ModelPostData;
+import com.viscocits.home_post.model.postModels.ModelPostComments;
+import com.viscocits.home_post.model.getPostResponse.ModelResponseWallPostData;
+import com.viscocits.home_post.model.postModels.ModelPostImages;
+import com.viscocits.home_post.model.postModels.ModelPostLikes;
+import com.viscocits.home_post.model.postModels.ModelPostMergedData;
+import com.viscocits.home_post.model.postModels.ModelPostRecognizeImages;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -55,7 +59,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -401,27 +404,35 @@ public class Utility {
 
     }
 
-    public static String printnotificationDifference(Date endDate) {
+    public static String getFormattedPostDate(String _endDate) {
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+        _endDate = _endDate.replace("T", " ");
+
+        Date endDate = null;
+        try {
+            endDate = dateFormat.parse(dateFormat.format(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S", Locale.getDefault()).parse(_endDate)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //milliseconds
         StringBuilder updatedTime = new StringBuilder();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
         Calendar cal = Calendar.getInstance();
         System.out.println(dateFormat.format(cal.getTime()));
         Date startDate = null;
         try {
             startDate = dateFormat.parse(dateFormat.format(cal.getTime()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         long different = startDate.getTime() - endDate.getTime();
 
-        //       System.out.println("startDate : " + startDate);
-        //       System.out.println("endDate : "+ endDate);
-        //       System.out.println("different : " + different);
 
         long secondsInMilli = 1000;
         long minutesInMilli = secondsInMilli * 60;
@@ -444,29 +455,29 @@ public class Utility {
                 elapsedDays,
                 elapsedHours, elapsedMinutes, elapsedSeconds);
         if (elapsedDays > 0) {
-            updatedTime.append(elapsedDays + " days");
+            updatedTime.append(elapsedDays + " days ago");
             return updatedTime.toString();
 
         }
         if (elapsedHours > 0) {
-            updatedTime.append(elapsedHours + " hour");
+            updatedTime.append(elapsedHours + " hour ago");
             return updatedTime.toString();
 
 
         }
         if (elapsedMinutes > 0) {
-            updatedTime.append(elapsedMinutes + " minutes");
+            updatedTime.append(elapsedMinutes + " minutes ago");
             return updatedTime.toString();
 
 
         }
         if (elapsedSeconds > 0) {
-            updatedTime.append(elapsedSeconds + " second");
+            updatedTime.append(elapsedSeconds + " seconds ago");
             return updatedTime.toString();
 
 
         }
-        return updatedTime.toString();
+        return "Just now";
 
     }
 
@@ -847,9 +858,9 @@ public class Utility {
 
     }
 
-    public static ArrayList<ModelPostData> getPostDummyData() {
+    /*public static ArrayList<ModelResponseWallPostData> getPostDummyData() {
 
-        ArrayList<ModelPostData> datas = new ArrayList<>();
+        ArrayList<ModelResponseWallPostData> datas = new ArrayList<>();
 
         ArrayList<ModelCommentsData> commentDatas;
 
@@ -862,7 +873,7 @@ public class Utility {
                 "That was really fun. Thanks anshul.",
                 "20 days ago"));
 
-        datas.add(new ModelPostData(
+        datas.add(new ModelResponseWallPostData(
                 "Anshul Jha",
                 "20 days ago",
                 "http://wallpapercave.com/wp/f5elcfO.jpg",
@@ -897,7 +908,7 @@ public class Utility {
                 "1 month ago"));
 
 
-        datas.add(new ModelPostData(
+        datas.add(new ModelResponseWallPostData(
                 "Gab Lopez",
                 "1 month ago",
                 "http://www.hdnicewallpapers.com/Walls/Big/Johnny%20Depp/Hollywood_Actor_Hohnny_Depp.jpg",
@@ -912,7 +923,7 @@ public class Utility {
 
         commentDatas = new ArrayList<>();
 
-        datas.add(new ModelPostData(
+        datas.add(new ModelResponseWallPostData(
                 "Gab Lopez",
                 "2 months ago",
                 "http://www.hdnicewallpapers.com/Walls/Big/Johnny%20Depp/Hollywood_Actor_Hohnny_Depp.jpg",
@@ -927,7 +938,7 @@ public class Utility {
 
         commentDatas = new ArrayList<>();
 
-        datas.add(new ModelPostData(
+        datas.add(new ModelResponseWallPostData(
                 "Anshul Jha",
                 "2 months ago",
                 "http://wallpapercave.com/wp/f5elcfO.jpg",
@@ -946,7 +957,7 @@ public class Utility {
                 "That was creative.",
                 "2 month ago"));
 
-        datas.add(new ModelPostData(
+        datas.add(new ModelResponseWallPostData(
                 "Gab Lopez",
                 "2 months ago",
                 "http://www.hdnicewallpapers.com/Walls/Big/Johnny%20Depp/Hollywood_Actor_Hohnny_Depp.jpg",
@@ -962,7 +973,7 @@ public class Utility {
         commentDatas = new ArrayList<>();
 
 
-        datas.add(new ModelPostData(
+        datas.add(new ModelResponseWallPostData(
                 "Ravi Poonia",
                 "2 months ago",
                 "https://s-media-cache-ak0.pinimg.com/originals/35/54/30/3554306d06a1cdeffffc9c914d1612d9.jpg",
@@ -978,7 +989,7 @@ public class Utility {
         commentDatas = new ArrayList<>();
 
 
-        datas.add(new ModelPostData(
+        datas.add(new ModelResponseWallPostData(
                 "Gab Lopez",
                 "2 months ago",
                 "http://www.hdnicewallpapers.com/Walls/Big/Johnny%20Depp/Hollywood_Actor_Hohnny_Depp.jpg",
@@ -994,7 +1005,7 @@ public class Utility {
         commentDatas = new ArrayList<>();
 
 
-        datas.add(new ModelPostData(
+        datas.add(new ModelResponseWallPostData(
                 "Gab Lopez",
                 "2 months ago",
                 "http://www.hdnicewallpapers.com/Walls/Big/Johnny%20Depp/Hollywood_Actor_Hohnny_Depp.jpg",
@@ -1010,7 +1021,7 @@ public class Utility {
         commentDatas = new ArrayList<>();
 
 
-        datas.add(new ModelPostData(
+        datas.add(new ModelResponseWallPostData(
                 "Mahbub Ahmed",
                 "2 months ago",
                 "http://www.jurgita.com/images_new/models/M/portfolio-fashion/w422xh450/atul-k-266948-304652.jpg",
@@ -1025,7 +1036,7 @@ public class Utility {
 
         commentDatas = new ArrayList<>();
 
-        datas.add(new ModelPostData(
+        datas.add(new ModelResponseWallPostData(
                 "Gab Lopez",
                 "3 months ago",
                 "http://www.hdnicewallpapers.com/Walls/Big/Johnny%20Depp/Hollywood_Actor_Hohnny_Depp.jpg",
@@ -1040,7 +1051,7 @@ public class Utility {
 
         commentDatas = new ArrayList<>();
 
-        datas.add(new ModelPostData(
+        datas.add(new ModelResponseWallPostData(
                 "Ravi Poonia",
                 "3 months ago",
                 "https://s-media-cache-ak0.pinimg.com/originals/35/54/30/3554306d06a1cdeffffc9c914d1612d9.jpg",
@@ -1053,7 +1064,7 @@ public class Utility {
 
 
         return datas;
-    }
+    }*/
 
     public static int getPostColor(Activity context, String type) {
 
@@ -1133,23 +1144,245 @@ public class Utility {
     }
 
 
-    public static ArrayList<ModelPostData> getFIlteredPost(ArrayList<ModelPostData> completeList
+    public static ArrayList<ModelResponseWallPostData> getFIlteredPost(ArrayList<ModelResponseWallPostData> completeList
             , String typeFilter
             , String typeCountry) {
 
-        ArrayList<ModelPostData> filteredList = new ArrayList<>();
+        ArrayList<ModelResponseWallPostData> filteredList = new ArrayList<>();
 
         if (typeFilter.equals("0"))
             return completeList;
         else {
-            for (ModelPostData data : completeList) {
-                if (data.getType().equals(typeFilter)) {
+            for (ModelResponseWallPostData data : completeList) {
+                if ("2".equals(typeFilter)) {
                     filteredList.add(data);
                 }
             }
             return filteredList;
         }
     }
+
+    public static ArrayList<ModelPostMergedData> getMergedPostData(ArrayList<ArrayList<ModelResponseWallPostData>> data) {
+
+        ArrayList<ModelPostMergedData> modelPostMergedDatas = new ArrayList<>();
+
+        // Merge Post Array Data
+
+        for (ModelResponseWallPostData modelPostData : data.get(0)) {
+
+            ModelPostMergedData modelPostMergedData = new ModelPostMergedData();
+
+            modelPostMergedData.setActive(modelPostData.getActive());
+            modelPostMergedData.setAvatarExt(modelPostData.getAvatarExt());
+            modelPostMergedData.setClient_Id(modelPostData.getClient_Id());
+            modelPostMergedData.setCOMMENTCOUNT(modelPostData.getCOMMENTCOUNT());
+            modelPostMergedData.setCountry_id(modelPostData.getCountry_id());
+            modelPostMergedData.setEmail(modelPostData.getEmail());
+            modelPostMergedData.setEngagement_Id(modelPostData.getEngagement_Id());
+            modelPostMergedData.setGroupCountryIDs(modelPostData.getGroupCountryIDs());
+            modelPostMergedData.setGrouped(modelPostData.getGrouped());
+            modelPostMergedData.setInvolvementCOUNT(modelPostData.getInvolvementCOUNT());
+            modelPostMergedData.setLIKECOUNT(modelPostData.getLIKECOUNT());
+            modelPostMergedData.setLIKEDBYUSER(modelPostData.getLIKEDBYUSER());
+            modelPostMergedData.setUserName(modelPostData.getUserName());
+            modelPostMergedData.setSuggestedChallenge(modelPostData.getSuggestedChallenge());
+            modelPostMergedData.setSPAMEDBYUSER(modelPostData.getSPAMEDBYUSER());
+            modelPostMergedData.setReward_Id(modelPostData.getReward_Id());
+            modelPostMergedData.setPostType(modelPostData.getPostType());
+            modelPostMergedData.setPostId(modelPostData.getPostId());
+            modelPostMergedData.setPostedDate(modelPostData.getPostedDate());
+            modelPostMergedData.setPostedBy(modelPostData.getPostedBy());
+            modelPostMergedData.setName(modelPostData.getName());
+            modelPostMergedData.setMessage(modelPostData.getMessage());
+
+            modelPostMergedDatas.add(modelPostMergedData);
+
+        }
+
+        // Merge Comments Array Data
+
+        for (ModelPostMergedData modelPostMergedData : modelPostMergedDatas) {
+
+            ArrayList<ModelPostComments> commentsDatas = new ArrayList<>();
+
+            for (ModelResponseWallPostData modelPostData : data.get(1)) {
+                if (modelPostMergedData.getPostId() == modelPostData.getPostId()) {
+
+                    ModelPostComments commentsData = new ModelPostComments(
+                            modelPostData.getPostId(),
+                            modelPostData.getCommentedBy(),
+                            modelPostData.getCommentedDate(),
+                            modelPostData.getCommentId(),
+                            modelPostData.getUpdatedBy(),
+                            modelPostData.getUpdatedDate(),
+                            modelPostData.getAvatarExt(),
+                            modelPostData.getName(),
+                            modelPostData.getMessage());
+
+                    commentsDatas.add(commentsData);
+
+                }
+            }
+
+            modelPostMergedData.setCommentsList(commentsDatas);
+
+        }
+
+       /* // Merge Comments Array Data
+
+        for (ModelPostMergedData modelPostMergedData : modelPostMergedDatas) {
+
+            ArrayList<ModelPostComments> commentsDatas = new ArrayList<>();
+
+            for (ModelResponseWallPostData modelPostData : data.get(1)) {
+                if (modelPostMergedData.getPostId() == modelPostData.getPostId()) {
+
+                    ModelPostComments commentsData = new ModelPostComments(
+                            modelPostData.getPostId(),
+                            modelPostData.getCommentedBy(),
+                            modelPostData.getCommentedDate(),
+                            modelPostData.getCommentId(),
+                            modelPostData.getUpdatedBy(),
+                            modelPostData.getUpdatedDate());
+
+                    commentsDatas.add(commentsData);
+
+                }
+            }
+
+            modelPostMergedData.setCommentsList(commentsDatas);
+
+        }*/
+
+        // Merge Likes Array Data
+
+        for (ModelPostMergedData modelPostMergedData : modelPostMergedDatas) {
+
+            ArrayList<ModelPostLikes> likesDatas = new ArrayList<>();
+
+            for (ModelResponseWallPostData modelPostData : data.get(2)) {
+                if (modelPostMergedData.getPostId() == modelPostData.getPostId()) {
+
+                    ModelPostLikes likesData = new ModelPostLikes(
+                            modelPostData.getPostId(),
+                            modelPostData.getLiked(),
+                            modelPostData.getLikedBy(),
+                            modelPostData.getLikedDate(),
+                            modelPostData.getLikeId());
+
+                    likesDatas.add(likesData);
+
+                }
+            }
+            modelPostMergedData.setLikesList(likesDatas);
+
+        }
+
+
+        // Merge Post Images Array Data
+
+        for (ModelPostMergedData modelPostMergedData : modelPostMergedDatas) {
+
+            ArrayList<ModelPostImages> imagesDatas = new ArrayList<>();
+
+            for (ModelResponseWallPostData modelPostData : data.get(3)) {
+                if (modelPostMergedData.getPostId() == modelPostData.getPostId()) {
+
+                    ModelPostImages postImages = new ModelPostImages(
+                            modelPostData.getPostId(),
+                            modelPostData.getContentType(),
+                            modelPostData.getCreatedBy(),
+                            modelPostData.getCreatedDate(),
+                            modelPostData.getImagePath(),
+                            modelPostData.getUrlLink(),
+                            modelPostData.getUserActEvidence_Id(),
+                            modelPostData.getUserActivity_Id()
+                    );
+
+                    imagesDatas.add(postImages);
+
+                }
+            }
+            modelPostMergedData.setPostImagesList(imagesDatas);
+        }
+
+
+        // Merge Recognize Images Array Data
+
+        for (ModelPostMergedData modelPostMergedData : modelPostMergedDatas) {
+
+            ArrayList<ModelPostRecognizeImages> recognizeImages = new ArrayList<>();
+
+            for (ModelResponseWallPostData modelPostData : data.get(4)) {
+                if (modelPostMergedData.getPostId() == modelPostData.getPostId()) {
+
+                    ModelPostRecognizeImages postRecognizeImages = new ModelPostRecognizeImages(
+                            modelPostData.getPostId(),
+                            modelPostData.getRecogImage_Id(),
+                            modelPostData.getRecognition_Id(),
+                            modelPostData.getUploadedBy(),
+                            modelPostData.getUploadedDate(),
+                            modelPostData.getImagePath());
+
+                    recognizeImages.add(postRecognizeImages);
+                }
+            }
+            modelPostMergedData.setRecognizeImagesList(recognizeImages);
+        }
+
+        return modelPostMergedDatas;
+    }
+
+    public static ArrayList<String> getAllPostImages(ArrayList<ModelPostImages> postImagesList, ArrayList<ModelPostRecognizeImages> recognizeImagesList) {
+        ArrayList<String> allPostImages = new ArrayList<>();
+
+        for (ModelPostImages postImages : postImagesList) {
+            allPostImages.add(postImages.getImagePath());
+        }
+        // allPostImages.add("test");
+        for (ModelPostRecognizeImages recognizeImages : recognizeImagesList) {
+            allPostImages.add(recognizeImages.getImagePath());
+
+        }
+
+        return allPostImages;
+    }
+
+    public static String getFormattedTime(String commentedDate) {
+
+       /*
+            Date today = new Date();
+            Date dateObj = new Date(millis);
+            long diff = 0;
+            String displayDate = "";
+            try {
+                if ((today.getTime() - dateObj.getTime()) < (60000)) {
+                    displayDate = "Just Now";
+                    return displayDate;
+                } else {
+                    diff = (today.getTime() - dateObj.getTime()) / (86400000);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (diff == 0) {
+                displayDate = new SimpleDateFormat("hh:mm a", Locale.getDefault()).format(dateObj);
+            } else if (diff == 1) {
+                displayDate = "Yesterday";
+            } else if (diff > 1) {
+                displayDate = new SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(dateObj);
+            }
+
+            return displayDate;*/
+
+        return "";
+
+
+    }
+
+
+
 
 
 

@@ -32,7 +32,9 @@
                     android:background="@color/colorWhite"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:padding="@dimen/_4sdp">
+                    android:paddingLeft="@dimen/_4sdp"
+                    android:paddingRight="@dimen/_4sdp"
+                    android:paddingTop="@dimen/_4sdp">
 
                     <View
                         android:layout_width="match_parent"
@@ -47,7 +49,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:src="@drawable/filter_home"
-                        android:tint="@color/tab_background_selected" />
+                        android:tint="@color/colorPrimaryDark" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -57,7 +59,7 @@
                         android:background="@color/colorWhite"
                         android:padding="@dimen/_4sdp"
                         android:text="Filter Post"
-                        android:textColor="@color/tab_background_selected" />
+                        android:textColor="@color/colorPrimaryDark" />
 
 
                 </RelativeLayout>
@@ -70,21 +72,32 @@
                 android:layout_marginBottom="@dimen/_4sdp"
                 android:orientation="horizontal">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_8sdp"
                     android:layout_weight="1"
+                    android:orientation="vertical"
                     android:padding="@dimen/_4sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/spinner_post_type"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/_4sdp"
+                        android:text="- by Engagement -"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_8sdp"
+                        android:visibility="gone" />
 
                     <Spinner
                         android:id="@+id/spinner_post_type"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:entries="@array/post_filter_type"
-                        android:textColor="@color/colorPostTypeTransparency" />
+                        android:layout_height="wrap_content" />
 
-                </RelativeLayout>
+
+                </LinearLayout>
 
                 <View
                     android:layout_width="1dp"
@@ -92,21 +105,31 @@
                     android:background="@color/color_light_grey" />
 
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_8sdp"
                     android:layout_weight="1"
+                    android:orientation="vertical"
                     android:padding="@dimen/_4sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/spinner_post_country"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/_4sdp"
+                        android:text="- by Country -"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_8sdp"
+                        android:visibility="gone" />
 
                     <Spinner
                         android:id="@+id/spinner_post_country"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:entries="@array/post_filter_country"
-                        android:textColor="@color/colorPostTypeTransparency" />
+                        android:layout_height="wrap_content" />
 
-                </RelativeLayout>
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -115,46 +138,69 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorBg"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <RelativeLayout
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/activity_main_swipe_refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorBg"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:orientation="vertical">
 
-
-            <TextView
-                android:id="@+id/tv_no_record_found"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:padding="@dimen/_24sdp"
-                android:text="No Record Found"
-                android:textSize="@dimen/_16sdp"
-                android:visibility="gone" />
+                android:layout_height="match_parent">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_posts"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/_4sdp"
-                android:background="@null"
-                android:clipToPadding="false"
-                android:divider="@null"
-                android:nestedScrollingEnabled="false"
-                android:orientation="vertical"
-                android:padding="@dimen/_4sdp"
-              />
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/colorPrimary" />
 
+                <TextView
+                    android:id="@+id/tv_no_record_found"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="@dimen/_24sdp"
+                    android:text="No Record Found"
+                    android:textSize="@dimen/_16sdp"
+                    android:visibility="gone" />
 
-        </RelativeLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_posts"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:background="@null"
+                    android:clipToPadding="false"
+                    android:divider="@null"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_4sdp" />
 
-    </android.support.v4.widget.NestedScrollView>
+                <ProgressBar
+                    android:id="@+id/progress_bar_pagination"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rv_posts"
+                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/colorPrimary"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </RelativeLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

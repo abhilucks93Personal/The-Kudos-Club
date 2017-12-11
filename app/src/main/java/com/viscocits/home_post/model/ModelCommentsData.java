@@ -1,4 +1,4 @@
-package com.viscocits.home_post;
+package com.viscocits.home_post.model;
 
 /**
  * Created by abhi on 05/08/17.

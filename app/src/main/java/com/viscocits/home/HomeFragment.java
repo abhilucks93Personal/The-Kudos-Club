@@ -1,7 +1,5 @@
 package com.viscocits.home;
 
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -10,10 +8,9 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.viscocits.R;
-import com.viscocits.home_post.PostFragment;
+import com.viscocits.home_post.view.PostFragment;
 
 
 /**
@@ -45,9 +42,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void initUi() {
         //Adding the tabs using addTab() method
         tabLayout.addTab(tabLayout.newTab().setText("Post"));
-        tabLayout.addTab(tabLayout.newTab().setText("Recognize"));
+        tabLayout.addTab(tabLayout.newTab().setText("Recognise"));
         tabLayout.addTab(tabLayout.newTab().setText("Challenges"));
-        tabLayout.addTab(tabLayout.newTab().setText("Kudos Bank"));
+        tabLayout.addTab(tabLayout.newTab().setText("Bank"));
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
@@ -102,10 +99,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             PostFragment postFragment = (PostFragment) adapter.getRegisteredFragment(0);
 
-            if (postFragment.shouldScroll())
-                return true;
-            else
-                return false;
+            return postFragment.shouldScroll();
 
 
         } else {

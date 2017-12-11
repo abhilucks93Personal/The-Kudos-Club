@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FF5100</color>
-    <color name="colorPrimaryDark">#FF5100</color>
+    <!-- <color name="colorPrimary">#FF5100</color>
+     <color name="colorPrimaryDark">#FF5100</color>
+     <color name="colorAccent">#c2c2c2</color>-->
+
+    <color name="colorPrimary">#2CA8E2</color>
+    <color name="colorPrimaryDark">#2D8DD6</color>
     <color name="colorAccent">#c2c2c2</color>
 
-    <color name="colorOrangeDark">#8f2d00</color>
+    <color name="colorOrangeDark">#2D8DD6</color>
     <color name="colorWhite">#ffffff</color>
-    <color name="tab_background_selected">#F58E23</color>
-    <color name="tab_background_unselected">#333333</color>
+    <!-- <color name="tab_background_selected">#F58E23</color>
+     <color name="tab_background_unselected">#333333</color>-->
+    <color name="tab_background_selected">#2E4054</color>
+    <color name="tab_background_unselected">#2CA8E2</color>
     <color name="colorBlack">#000000</color>
     <color name="colorBlack50">#BF000000</color>
     <color name="color_light_grey">#F1F1F1</color>
@@ -16,15 +22,29 @@
     <color name="colorBg">#F1F1F1</color>
     <color name="colorRed">#ff0000</color>
     <color name="colorGrey">#4D556B</color>
+    <color name="colorYellow">#F58E23</color>
     <color name="evidenceButtonBg">#C94D3F</color>
 
 
+    <!--  let appThemeColorYellow: UIColor = HelperClass.hexStringToUIColor(hex: "#F58E23")
+      let appThemeColorParrotGreen: UIColor = HelperClass.hexStringToUIColor(hex: "#58C42C")-->
+
+
     <color name="colorPostTypeTransparency">#52A12B</color>
-    <color name="colorPostTypeRecognition">#4D89E2</color>
     <color name="colorPostTypeExceptional">#52A12B</color>
     <color name="colorPostTypeCollaboration">#989824</color>
     <color name="colorPostTypeOwnership">#82004D</color>
     <color name="colorPostTypeTDynamic">#60397A</color>
+
+
+    <color name="colorPostTypeRecognition">#008ae6</color>
+    <color name="colorPostTypeInnovation">#F8B533</color>
+    <color name="colorPostTypeEnvironment">#52a12b</color>
+    <color name="colorPostTypeGiving">#6b367d</color>
+    <color name="colorPostTypeWellBeing">#99004d</color>
+    <color name="colorPostTypeCorporate">#3E4B5E</color>
+    <color name="colorPostTypeGeneral">#444000</color>
+    <color name="colorPostTypeWork">#444000</color>
 
 
     <color name="black_semi_transparent">#B2000000</color>
@@ -36,4 +56,5 @@
     <color name="pink_pressed">#ec407a</color>
     <color name="blue_semi_transparent">#805677fc</color>
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
+    <color name="colorBlack_transparent_25">#40000000</color>
 </resources>
