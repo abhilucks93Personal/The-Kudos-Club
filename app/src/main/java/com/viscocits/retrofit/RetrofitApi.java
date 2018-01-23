@@ -4,12 +4,19 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.support.v4.app.FragmentActivity;
 
+import com.bumptech.glide.util.Util;
 import com.viscocits.home_post.model.ModelResponseAddComment;
 import com.viscocits.home_post.model.ModelResponseCommon;
 import com.viscocits.home_post.model.ModelResponseCountryFilterList;
 import com.viscocits.home_post.model.ModelResponseEngagementFilterList;
 import com.viscocits.home_post.model.getPostResponse.ModelResponseWallPost;
 import com.viscocits.home_post.view.PostFragment;
+import com.viscocits.home_recognize.RecognizeFragment;
+import com.viscocits.home_recognize.model.ModelResponseKudosPoints;
+import com.viscocits.home_recognize.model.ModelResponsePointsList;
+import com.viscocits.home_recognize.model.ModelResponseReasonsList;
+import com.viscocits.home_recognize.model.ModelResponseUsersList;
+import com.viscocits.home_recognize.model.ModelResponseValuesList;
 import com.viscocits.utils.Constants;
 import com.viscocits.utils.Utility;
 
@@ -128,7 +135,6 @@ public class RetrofitApi {
         String userId = Utility.getPreferences(activity, Constants.keyUserId);
         String uniqueDeviceId = Utility.getPreferences(activity, Constants.keyUniqueDeviceId);
         String deviceId = Utility.getPreferences(activity, Constants.keyDeviceId);
-
 
 
         RetrofitClient.getClient().getWallPostData(uniqueDeviceId,
@@ -288,6 +294,155 @@ public class RetrofitApi {
                     public void onNext(ModelResponseAddComment responseAddComment) {
                         mProgressDialog.dismiss();
                         mlistener_response._onNext(responseAddComment);
+
+                    }
+
+                });
+    }
+
+    public void getKudosPoints(final Activity activity,
+                               final ResponseListener _mlistener_response) {
+        this.mlistener_response = _mlistener_response;
+
+        String userId = Utility.getPreferences(activity, Constants.P_KEY_USER_ID);
+
+        RetrofitClient.getClient().getKudosPoints(Constants.CLIENT_ID, userId)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ModelResponseKudosPoints>() {
+                    @Override
+                    public void onCompleted() {
+                        mlistener_response._onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Utility.showToast(activity, "failed");
+                        mlistener_response._onError(e);
+
+                    }
+
+                    @Override
+                    public void onNext(ModelResponseKudosPoints modelResponseKudosPoints) {
+                        mlistener_response._onNext(modelResponseKudosPoints);
+
+                    }
+
+                });
+    }
+
+    public void getUsersList(final Activity activity,
+                             final ResponseListener _mlistener_response) {
+        this.mlistener_response = _mlistener_response;
+
+        String userId = Utility.getPreferences(activity, Constants.P_KEY_USER_ID);
+
+        RetrofitClient.getClient().getUsers(Constants.CLIENT_ID, userId)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ModelResponseUsersList>() {
+                    @Override
+                    public void onCompleted() {
+                        mlistener_response._onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Utility.showToast(activity, "failed");
+                        mlistener_response._onError(e);
+
+                    }
+
+                    @Override
+                    public void onNext(ModelResponseUsersList modelResponseUsersList) {
+                        mlistener_response._onNext(modelResponseUsersList);
+
+                    }
+
+                });
+    }
+
+    public void getReasonsList(final Activity activity,
+                               final ResponseListener _mlistener_response) {
+        this.mlistener_response = _mlistener_response;
+
+        RetrofitClient.getClient().getReasonsList(Constants.CLIENT_ID)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ModelResponseReasonsList>() {
+                    @Override
+                    public void onCompleted() {
+                        mlistener_response._onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Utility.showToast(activity, "failed");
+                        mlistener_response._onError(e);
+
+                    }
+
+                    @Override
+                    public void onNext(ModelResponseReasonsList modelResponseReasonsList) {
+                        mlistener_response._onNext(modelResponseReasonsList);
+
+                    }
+
+                });
+    }
+
+    public void getValuesList(final Activity activity,
+                              final ResponseListener _mlistener_response) {
+        this.mlistener_response = _mlistener_response;
+
+        RetrofitClient.getClient().getValuesList(Constants.CLIENT_ID)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ModelResponseValuesList>() {
+                    @Override
+                    public void onCompleted() {
+                        mlistener_response._onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Utility.showToast(activity, "failed");
+                        mlistener_response._onError(e);
+
+                    }
+
+                    @Override
+                    public void onNext(ModelResponseValuesList modelResponseValuesList) {
+                        mlistener_response._onNext(modelResponseValuesList);
+
+                    }
+
+                });
+    }
+
+    public void getPointsList(final Activity activity,
+                              final ResponseListener _mlistener_response) {
+        this.mlistener_response = _mlistener_response;
+
+        RetrofitClient.getClient().getPointsList(Constants.CLIENT_ID)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ModelResponsePointsList>() {
+                    @Override
+                    public void onCompleted() {
+                        mlistener_response._onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Utility.showToast(activity, "failed");
+                        mlistener_response._onError(e);
+
+                    }
+
+                    @Override
+                    public void onNext(ModelResponsePointsList modelResponsePointsList) {
+                        mlistener_response._onNext(modelResponsePointsList);
 
                     }
 

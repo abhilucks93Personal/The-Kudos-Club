@@ -24,8 +24,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    //public static final String BASE_URL = "http://avinityaliveapi.aviniti.org/AvinityAliveAPI/";
-    public static final String BASE_URL = "https://www.avinity.com/APIAvinityAlive/AvinityAliveAPI/";
+    public static final String BASE_URL = "http://avinityaliveapi.aviniti.org/AvinityAliveAPI/";
+   // public static final String BASE_URL = "https://www.avinity.com/APIAvinityAlive/AvinityAliveAPI/";
 
     private static Retrofit retrofit = null;
     // static OkHttpClient httpClient = getUnsafeOkHttpClient();

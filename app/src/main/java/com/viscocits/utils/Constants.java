@@ -6,13 +6,14 @@ package com.viscocits.utils;
 
 public class Constants {
 
-    public static final String CLIENT_ID = "10";
+    public static final String CLIENT_ID = "11";
+    public static final String P_KEY_USER_ID = "userId";
 
-    //  public static String IMAGE_BASE_URL = "http://gvc.aviniti.org/";
-    //  public static String CLIENT_NAME = "GVC";
+    public static String IMAGE_BASE_URL = "http://gvc.aviniti.org/";
+    public static String CLIENT_NAME = "GVC";
 
-    public static String IMAGE_BASE_URL = "http://121hours.co.uk/";
-    public static String CLIENT_NAME = "AvinityLive";
+    //public static String IMAGE_BASE_URL = "http://121hours.co.uk/";
+    //public static String CLIENT_NAME = "AvinityLive";
 
     public static String UserImgPath = IMAGE_BASE_URL + "Upload/" + CLIENT_NAME + "/UserImages/";
     public static String UserActivityImgPath = IMAGE_BASE_URL + "Upload/" + CLIENT_NAME + "/UserActivity/";

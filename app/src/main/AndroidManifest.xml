@@ -51,7 +51,10 @@
         <activity
             android:name=".home_challenge.AddChallengeActivity"
             android:windowSoftInputMode="adjustResize" />
+
         <activity android:name=".utils.zoom.ZoomMultiImageClass" />
+
+        <activity android:name=".home_post.view.ImageListActivity" />
     </application>
 
 </manifest>

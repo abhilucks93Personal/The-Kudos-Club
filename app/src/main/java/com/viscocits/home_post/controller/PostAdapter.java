@@ -28,6 +28,7 @@ import com.viscocits.home_post.interfac.PostActionListener;
 import com.viscocits.home_post.model.ModelResponseAddComment;
 import com.viscocits.home_post.model.ModelResponseCommon;
 import com.viscocits.home_post.model.postModels.ModelPostMergedData;
+import com.viscocits.home_post.view.ImageListActivity;
 import com.viscocits.other.CircleTransform;
 import com.viscocits.retrofit.RetrofitApi;
 import com.viscocits.utils.Constants;
@@ -212,7 +213,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         holder.ivMainImage1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, ZoomMultiImageClass.class)
+                context.startActivity(new Intent(context, ImageListActivity.class)
                         .putExtra("pos", 1)
                         .putExtra("urls", postImages));
             }
@@ -221,7 +222,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         holder.ivMainImage2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, ZoomMultiImageClass.class)
+                context.startActivity(new Intent(context, ImageListActivity.class)
                         .putExtra("pos", 2)
                         .putExtra("urls", postImages));
             }
@@ -230,7 +231,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         holder.ivMainImage3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, ZoomMultiImageClass.class)
+                context.startActivity(new Intent(context, ImageListActivity.class)
                         .putExtra("pos", 3)
                         .putExtra("urls", postImages));
             }
@@ -239,7 +240,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         holder.ivMainImage4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, ZoomMultiImageClass.class)
+                context.startActivity(new Intent(context, ImageListActivity.class)
                         .putExtra("pos", 4)
                         .putExtra("urls", postImages));
             }
@@ -248,7 +249,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         holder.tvMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, ZoomMultiImageClass.class)
+                context.startActivity(new Intent(context, ImageListActivity.class)
                         .putExtra("pos", 5)
                         .putExtra("urls", postImages));
             }

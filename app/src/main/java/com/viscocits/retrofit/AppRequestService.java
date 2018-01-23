@@ -6,6 +6,11 @@ import com.viscocits.home_post.model.ModelResponseCommon;
 import com.viscocits.home_post.model.ModelResponseCountryFilterList;
 import com.viscocits.home_post.model.ModelResponseEngagementFilterList;
 import com.viscocits.home_post.model.getPostResponse.ModelResponseWallPost;
+import com.viscocits.home_recognize.model.ModelResponseKudosPoints;
+import com.viscocits.home_recognize.model.ModelResponsePointsList;
+import com.viscocits.home_recognize.model.ModelResponseReasonsList;
+import com.viscocits.home_recognize.model.ModelResponseUsersList;
+import com.viscocits.home_recognize.model.ModelResponseValuesList;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -64,5 +69,26 @@ public interface AppRequestService {
                                                        @Field("UserImgPath") String userImgPath,
                                                        @Field("defaultAvatar") String defaultAvatar);
 
+    @FormUrlEncoded
+    @POST("GetRecognitionReasons")
+    Observable<ModelResponseReasonsList> getReasonsList(@Field("ClientId") String clientId);
+
+    @FormUrlEncoded
+    @POST("GetRecognitionRewards")
+    Observable<ModelResponseValuesList> getValuesList(@Field("ClientId") String clientId);
+
+    @FormUrlEncoded
+    @POST("GetRecognitionValues")
+    Observable<ModelResponsePointsList> getPointsList(@Field("ClientId") String clientId);
+
+    @FormUrlEncoded
+    @POST("GetUserGivenTimeByUserID")
+    Observable<ModelResponseKudosPoints> getKudosPoints(@Field("ClientId") String clientId,
+                                                        @Field("UserId") String userId);
+
+    @FormUrlEncoded
+    @POST("GetUserAutoCompleteDataLabel")
+    Observable<ModelResponseUsersList> getUsers(@Field("ClientId") String clientId,
+                                                @Field("UserId") String userId);
 
 }
