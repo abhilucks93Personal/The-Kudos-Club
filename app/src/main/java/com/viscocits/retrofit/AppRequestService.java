@@ -9,6 +9,7 @@ import com.viscocits.home_post.model.getPostResponse.ModelResponseWallPost;
 import com.viscocits.home_recognize.model.ModelResponseKudosPoints;
 import com.viscocits.home_recognize.model.ModelResponsePointsList;
 import com.viscocits.home_recognize.model.ModelResponseReasonsList;
+import com.viscocits.home_recognize.model.ModelResponseRecognitionSubmit;
 import com.viscocits.home_recognize.model.ModelResponseUsersList;
 import com.viscocits.home_recognize.model.ModelResponseValuesList;
 
@@ -91,4 +92,14 @@ public interface AppRequestService {
     Observable<ModelResponseUsersList> getUsers(@Field("ClientId") String clientId,
                                                 @Field("UserId") String userId);
 
+    @FormUrlEncoded
+    @POST("SaveRecognitionWithReturnId")
+    Observable<ModelResponseRecognitionSubmit> submitRecognition(@Field("User_ID") int userId,
+                                                                 @Field("RecognitionReason_ID") int reasonId,
+                                                                 @Field("RecognitionReason_ID") int rewardId,
+                                                                 @Field("SupportingText") String supportingText,
+                                                                 @Field("IsActive") boolean b,
+                                                                 @Field("ClientId") String clientId,
+                                                                 @Field("CreatedBy") String mUserId,
+                                                                 @Field("ValueTitle") String valueTitle);
 }

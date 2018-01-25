@@ -1,7 +1,6 @@
 package com.viscocits.home_recognize;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,13 +9,14 @@ import android.support.v7.widget.AppCompatRadioButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -29,6 +29,7 @@ import com.viscocits.home_recognize.model.ModelResponsePointsList;
 import com.viscocits.home_recognize.model.ModelResponsePointsListData;
 import com.viscocits.home_recognize.model.ModelResponseReasonsList;
 import com.viscocits.home_recognize.model.ModelResponseReasonsListData;
+import com.viscocits.home_recognize.model.ModelResponseRecognitionSubmit;
 import com.viscocits.home_recognize.model.ModelResponseUsersList;
 import com.viscocits.home_recognize.model.ModelResponseUsersListData;
 import com.viscocits.home_recognize.model.ModelResponseValuesList;
@@ -43,22 +44,28 @@ import java.util.ArrayList;
 /**
  * Created by ng on 2/12/2017.
  */
-public class RecognizeFragment extends Fragment implements View.OnClickListener, RetrofitApi.ResponseListener {
-    TextView tvNoRecordFound, tvSubmit, tvKudosPoints;
+public class RecognizeFragment extends Fragment implements View.OnClickListener, RetrofitApi.ResponseListener, AdapterView.OnItemClickListener {
+    private TextView tvKudosPoints;
     private AutoCompleteTextView actSearch;
-    private RelativeLayout rl_info;
     private ProgressBar progressBar;
     private LinearLayout llMain;
+    private Spinner spinnerReasons;
+    private LinearLayout llValues;
+    private EditText etComment;
+
+    private RadioGroup rgPoints;
     private ArrayList<ModelResponseReasonsListData> modelResponseReasonsListData;
     private ArrayList<ModelResponseValuesListData> modelResponseValuesListData;
     private ArrayList<ModelResponsePointsListData> modelResponsePointsListData;
-    private Spinner spinnerReasons;
-    private LinearLayout llValues;
-    private RadioGroup rgPoints;
-    private ArrayAdapter<ModelResponseReasonsListData> reasonAdapter;
-    ArrayList<String> selectedValues = new ArrayList<>();
-    private ModelResponseKudosPointsData modelResponseKudosPointsData;
-    private ArrayList<ModelResponseUsersListData> modelResponseUsersListData;
+    private ArrayList<CheckBox> valueCheckBoxes = new ArrayList<>();
+
+    ArrayList<ModelResponseUsersListData> modelResponseUsersListData;
+    ModelResponseKudosPointsData modelResponseKudosPointsData;
+    ModelResponseUsersListData selectedUserData;
+
+    ModelResponseValuesListData selectedValue;
+    String selectedPoint = "";
+
 
     @Nullable
     @Override
@@ -78,9 +85,10 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
         llMain = (LinearLayout) view.findViewById(R.id.ll_main);
 
         actSearch = (AutoCompleteTextView) view.findViewById(R.id.act_search);
-        tvSubmit = (TextView) view.findViewById(R.id.tv_submit);
+        actSearch.setOnItemClickListener(this);
+        TextView tvSubmit = (TextView) view.findViewById(R.id.tv_submit);
         tvSubmit.setOnClickListener(this);
-        rl_info = (RelativeLayout) view.findViewById(R.id.rl_info);
+        RelativeLayout rl_info = (RelativeLayout) view.findViewById(R.id.rl_info);
         rl_info.setOnClickListener(this);
 
         spinnerReasons = (Spinner) view.findViewById(R.id.spinner_reasons);
@@ -88,6 +96,7 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
         rgPoints = (RadioGroup) view.findViewById(R.id.rg_points);
 
         tvKudosPoints = (TextView) view.findViewById(R.id.tv_kudos_points);
+        etComment = (EditText) view.findViewById(R.id.et_comment);
 
     }
 
@@ -138,9 +147,51 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
                 break;
 
             case R.id.tv_submit:
-                Utility.showToast(getActivity(), Constants.MSG_UNDER_CONSTRUCTION);
+                submitRecognition();
                 break;
         }
+    }
+
+    private void submitRecognition() {
+        int userId;
+        if (selectedUserData != null)
+            userId = (int) selectedUserData.getValue();
+        else {
+            Utility.showToast(getActivity(), Constants.error_msg_select_user);
+            return;
+        }
+
+        int reasonId;
+        if (modelResponseReasonsListData.get(spinnerReasons.getSelectedItemPosition()) != null)
+            reasonId = modelResponseReasonsListData.get(spinnerReasons.getSelectedItemPosition()).getReason_Id();
+        else {
+            Utility.showToast(getActivity(), Constants.error_msg_select_reason);
+            return;
+        }
+
+        int rewardId;
+        if (selectedValue != null)
+            rewardId = selectedValue.getReward_Id();
+        else {
+            Utility.showToast(getActivity(), Constants.error_msg_select_value);
+            return;
+        }
+
+
+        String valueTitle;
+        if (selectedPoint.length() > 0)
+            valueTitle = selectedPoint;
+        else {
+            Utility.showToast(getActivity(), Constants.error_msg_select_points);
+            return;
+        }
+
+        String supportingText = etComment.getText().toString().trim();
+
+        RetrofitApi.getInstance().submitRecognition(getActivity(),
+                this,
+                userId, reasonId, rewardId, valueTitle, supportingText);
+
     }
 
 
@@ -164,7 +215,7 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void _onCompleted() {
-       // progressBar.setVisibility(View.GONE);
+        // progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -210,9 +261,20 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
                 progressBar.setVisibility(View.GONE);
                 llMain.setVisibility(View.VISIBLE);
             }
+        } else if (obj instanceof ModelResponseRecognitionSubmit) {
+            ModelResponseRecognitionSubmit modelResponseRecognitionSubmit = (ModelResponseRecognitionSubmit) obj;
+            if (modelResponseRecognitionSubmit.getStatusCode().equals(Constants.STATUS_CODE_SUCCESS)) {
+                long recognitionId = modelResponseRecognitionSubmit.getData();
+                showImageDialog(recognitionId);
+
+            }
         }
     }
 
+    private void showImageDialog(long recognitionId) {
+
+
+    }
 
 
     private void setKudosPointsData() {
@@ -227,7 +289,6 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
         actSearch.setAdapter(adapter);
     }
 
-    int selectedPointId;
 
     private void setPointsData() {
         RadioGroup.LayoutParams rprms;
@@ -237,6 +298,7 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
             AppCompatRadioButton radioButton = new AppCompatRadioButton(getActivity());
 
             if (index == 0) {
+                selectedPoint = listData.getValueTitle();
                 radioButton.setChecked(true);
             }
             radioButton.setId(index);
@@ -246,7 +308,7 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked)
-                        selectedPointId = listData.getValue_Id();
+                        selectedPoint = listData.getValueTitle();
                 }
             });
             rprms = new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.WRAP_CONTENT);
@@ -265,15 +327,22 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
             checkBox.setId(index);
             checkBox.setHighlightColor(getResources().getColor(R.color.tab_background_selected));
             checkBox.setText(listData.getRewardTitle());
+            if (index == 0)
+                checkBox.setChecked(true);
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked)
-                        selectedValues.add(String.valueOf(listData.getReward_Id()));
-                    else
-                        selectedValues.remove(String.valueOf(listData.getReward_Id()));
+                    for (CheckBox checkBox1 : valueCheckBoxes) {
+                        checkBox1.setChecked(false);
+                    }
+                    if (isChecked) {
+                        selectedValue = listData;
+                    } else {
+                        selectedValue = null;
+                    }
                 }
             });
+            valueCheckBoxes.add(checkBox);
             llValues.addView(checkBox);
             index++;
         }
@@ -281,7 +350,15 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
     }
 
     private void setReasonsData() {
-        reasonAdapter = new ArrayAdapter<>(getActivity(), R.layout.simple_spinner_item, modelResponseReasonsListData);
+        ArrayAdapter<ModelResponseReasonsListData> reasonAdapter = new ArrayAdapter<>(getActivity(), R.layout.simple_spinner_item, modelResponseReasonsListData);
         spinnerReasons.setAdapter(reasonAdapter);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Object item = parent.getItemAtPosition(position);
+        if (item instanceof ModelResponseUsersListData) {
+            selectedUserData = (ModelResponseUsersListData) item;
+        }
     }
 }

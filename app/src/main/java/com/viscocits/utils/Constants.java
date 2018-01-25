@@ -44,4 +44,8 @@ public class Constants {
     public static String keyUserId = "keyUserId";
     public static String keyUniqueDeviceId = "keyUniqueDeviceId";
     public static String keyDeviceId = "keyDeviceId";
+    public static String error_msg_select_user="Please select a user to continue";
+    public static String error_msg_select_reason="Please select a reason to continue";
+    public static String error_msg_select_value="Please select a value to continue";
+    public static String error_msg_select_points="Please select kudos point to continue";
 }

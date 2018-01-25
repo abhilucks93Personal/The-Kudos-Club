@@ -2,19 +2,16 @@ package com.viscocits.retrofit;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.support.v4.app.FragmentActivity;
 
-import com.bumptech.glide.util.Util;
 import com.viscocits.home_post.model.ModelResponseAddComment;
 import com.viscocits.home_post.model.ModelResponseCommon;
 import com.viscocits.home_post.model.ModelResponseCountryFilterList;
 import com.viscocits.home_post.model.ModelResponseEngagementFilterList;
 import com.viscocits.home_post.model.getPostResponse.ModelResponseWallPost;
-import com.viscocits.home_post.view.PostFragment;
-import com.viscocits.home_recognize.RecognizeFragment;
 import com.viscocits.home_recognize.model.ModelResponseKudosPoints;
 import com.viscocits.home_recognize.model.ModelResponsePointsList;
 import com.viscocits.home_recognize.model.ModelResponseReasonsList;
+import com.viscocits.home_recognize.model.ModelResponseRecognitionSubmit;
 import com.viscocits.home_recognize.model.ModelResponseUsersList;
 import com.viscocits.home_recognize.model.ModelResponseValuesList;
 import com.viscocits.utils.Constants;
@@ -449,5 +446,52 @@ public class RetrofitApi {
                 });
     }
 
+    public void submitRecognition(final Activity activity,
+                                  final ResponseListener _mlistener_response,
+                                  int userId,
+                                  int reasonId,
+                                  int rewardId,
+                                  String valueTitle,
+                                  String supportingText) {
+
+
+        this.mlistener_response = _mlistener_response;
+
+        String mUserId = Utility.getPreferences(activity, Constants.P_KEY_USER_ID);
+
+        RetrofitClient.getClient().submitRecognition(userId,
+                reasonId,
+                rewardId,
+                supportingText,
+                true,
+                Constants.CLIENT_ID,
+                mUserId,
+                valueTitle
+        )
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ModelResponseRecognitionSubmit>() {
+                    @Override
+                    public void onCompleted() {
+                        mlistener_response._onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Utility.showToast(activity, "failed");
+                        mlistener_response._onError(e);
+
+                    }
+
+                    @Override
+                    public void onNext(ModelResponseRecognitionSubmit modelResponseRecognitionSubmit) {
+                        mlistener_response._onNext(modelResponseRecognitionSubmit);
+
+                    }
+
+                });
+
+
+    }
 
 }
