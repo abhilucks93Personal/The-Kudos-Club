@@ -32,8 +32,8 @@ import com.viscocits.home_post.view.ImageListActivity;
 import com.viscocits.other.CircleTransform;
 import com.viscocits.retrofit.RetrofitApi;
 import com.viscocits.utils.Constants;
+import com.viscocits.utils.GlideHelper;
 import com.viscocits.utils.Utility;
-import com.viscocits.utils.zoom.ZoomMultiImageClass;
 
 import java.util.ArrayList;
 
@@ -115,12 +115,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
 
         Glide.with(context).load(postData.getAvatarExt())
-                .crossFade()
+
                 .thumbnail(0.5f)
-                .placeholder(R.drawable.image_placeholder)
-                .error(R.drawable.image_placeholder)
-                .bitmapTransform(new CircleTransform(context))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.ivProfile);
 
         holder.tvName.setText(postData.getName());
@@ -482,11 +478,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             case 1:
                 llPostImagesMain.setVisibility(View.VISIBLE);
                 llPostImagesMain.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 800));
-                Picasso.with(context)
+
+                GlideHelper.loadUrlFull(ivMainImage1, null,postImages.get(0));
+
+               /* Picasso.with(context)
                         .load(postImages.get(0))
                         .placeholder(R.color.colorBlack)
                         .error(R.color.colorBlack)
-                        .into(ivMainImage1);
+                        .into(ivMainImage1);*/
                 ivMainImage1.setVisibility(View.VISIBLE);
                 ivMainImage2.setVisibility(View.GONE);
                 llPostImage2.setVisibility(View.GONE);
@@ -495,16 +494,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             case 2:
                 llPostImagesMain.setVisibility(View.VISIBLE);
                 llPostImagesMain.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 400));
-                Picasso.with(context)
+
+                GlideHelper.loadUrlFull(ivMainImage1, null,postImages.get(0));
+                /*Picasso.with(context)
                         .load(postImages.get(0))
                         .placeholder(R.color.colorBlack)
                         .error(R.color.colorBlack)
-                        .into(ivMainImage1);
-                Picasso.with(context)
+                        .into(ivMainImage1);*/
+                GlideHelper.loadUrlFull(ivMainImage2, null,postImages.get(1));
+                /*Picasso.with(context)
                         .load(postImages.get(1))
                         .placeholder(R.color.colorBlack)
                         .error(R.color.colorBlack)
-                        .into(ivMainImage2);
+                        .into(ivMainImage2);*/
                 ivMainImage1.setVisibility(View.VISIBLE);
                 ivMainImage2.setVisibility(View.VISIBLE);
                 llPostImage2.setVisibility(View.GONE);
@@ -513,17 +515,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             case 3:
                 llPostImagesMain.setVisibility(View.VISIBLE);
                 llPostImagesMain.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 800));
-                Picasso.with(context)
+                GlideHelper.loadUrlFull(ivMainImage1, null,postImages.get(0));
+                /*Picasso.with(context)
                         .load(postImages.get(0))
                         .placeholder(R.color.colorBlack)
                         .error(R.color.colorBlack)
-                        .into(ivMainImage1);
-                Picasso.with(context)
+                        .into(ivMainImage1);*/
+                GlideHelper.loadUrlFull(ivMainImage2, null,postImages.get(1));
+                /*Picasso.with(context)
                         .load(postImages.get(1))
                         .placeholder(R.color.colorBlack)
                         .error(R.color.colorBlack)
-                        .into(ivMainImage2);
-                Picasso.with(context).load(postImages.get(2)).into(ivMainImage3);
+                        .into(ivMainImage2);*/
+                GlideHelper.loadUrlFull(ivMainImage3, null,postImages.get(2));
+              //  Picasso.with(context).load(postImages.get(2)).into(ivMainImage3);
                 ivMainImage1.setVisibility(View.VISIBLE);
                 ivMainImage2.setVisibility(View.VISIBLE);
                 llPostImage2.setVisibility(View.VISIBLE);
@@ -535,7 +540,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             case 4:
                 llPostImagesMain.setVisibility(View.VISIBLE);
                 llPostImagesMain.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 800));
-                Picasso.with(context)
+            /*    Picasso.with(context)
                         .load(postImages.get(0))
                         .placeholder(R.color.colorBlack)
                         .error(R.color.colorBlack)
@@ -549,12 +554,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                         .load(postImages.get(2))
                         .placeholder(R.color.colorBlack)
                         .error(R.color.colorBlack)
-                        .into(ivMainImage3);
-                Picasso.with(context)
+                        .into(ivMainImage3);*/
+
+                GlideHelper.loadUrlFull(ivMainImage1, null,postImages.get(0));
+
+                GlideHelper.loadUrlFull(ivMainImage2, null,postImages.get(1));
+
+                GlideHelper.loadUrlFull(ivMainImage3, null,postImages.get(2));
+
+                GlideHelper.loadUrlFull(ivMainImage4, null,postImages.get(3));
+
+               /* Picasso.with(context)
                         .load(postImages.get(3))
                         .placeholder(R.color.colorBlack)
                         .error(R.color.colorBlack)
-                        .into(ivMainImage4);
+                        .into(ivMainImage4);*/
                 ivMainImage1.setVisibility(View.VISIBLE);
                 ivMainImage2.setVisibility(View.VISIBLE);
                 llPostImage2.setVisibility(View.VISIBLE);
@@ -566,7 +580,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             default:
                 llPostImagesMain.setVisibility(View.VISIBLE);
                 llPostImagesMain.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 800));
-                Picasso.with(context)
+               /* Picasso.with(context)
                         .load(postImages.get(0))
                         .placeholder(R.color.colorBlack)
                         .error(R.color.colorBlack)
@@ -585,7 +599,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                         .load(postImages.get(3))
                         .placeholder(R.color.colorBlack)
                         .error(R.color.colorBlack)
-                        .into(ivMainImage4);
+                        .into(ivMainImage4);*/
+
+
+                GlideHelper.loadUrlFull(ivMainImage1, null,postImages.get(0));
+
+                GlideHelper.loadUrlFull(ivMainImage2, null,postImages.get(1));
+
+                GlideHelper.loadUrlFull(ivMainImage3, null,postImages.get(2));
+
+                GlideHelper.loadUrlFull(ivMainImage4, null,postImages.get(3));
+
                 ivMainImage1.setVisibility(View.VISIBLE);
                 ivMainImage2.setVisibility(View.VISIBLE);
                 llPostImage2.setVisibility(View.VISIBLE);

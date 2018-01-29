@@ -1,6 +1,7 @@
 package com.viscocits.home_post.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +12,9 @@ import android.view.MenuItem;
 import com.viscocits.R;
 import com.viscocits.home_post.controller.ImageListAdapter;
 import com.viscocits.support.ContactUsActivity;
+import com.viscocits.utils.GlideHelper;
 import com.viscocits.utils.Utility;
+import com.viscocits.utils.zoom.ZoomMultiImageClass;
 
 import java.util.ArrayList;
 
@@ -42,6 +45,8 @@ public class ImageListActivity extends AppCompatActivity {
         rvImages.setAdapter(imageListAdapter);
         rvImages.smoothScrollToPosition(pos);
 
+
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Drawable d = getResources().getDrawable(R.drawable.layout_bg_toolbar);
@@ -65,4 +70,9 @@ public class ImageListActivity extends AppCompatActivity {
     }
 
 
+    public void onItemClick(int position) {
+        startActivity(new Intent(ImageListActivity.this,ZoomMultiImageClass.class)
+                .putExtra("pos", position)
+                .putExtra("urls", imageUrls));
+    }
 }

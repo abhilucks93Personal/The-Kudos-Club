@@ -10,26 +10,30 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
 import com.viscocits.R;
 import com.viscocits.utils.Utility;
+import com.viscocits.utils.zoom.settings.SettingsController;
+import com.viscocits.utils.zoom.settings.SettingsMenu;
 
 import java.util.ArrayList;
 
+
+/**
+ * Created by Abhi on 5/13/16.
+ */
 public class ZoomMultiImageClass extends Activity {
 
-    private ImageView back_btn;
-    private ZoomMultiImagePagerAdapter zoomMultiImagePagerAdapter;
-    private ViewPager vpZoomImages;
-    private TextView[] dots;
     private ArrayList<String> imageUrls = new ArrayList<>();
     private LinearLayout llDotsOfferImages;
-
+    private final SettingsMenu settingsMenu = new SettingsMenu();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Utility.setStatusBarTranslucent(this, false);
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.zoom_multi_image);
+
 
         Bundle bundle = getIntent().getExtras();
         int pos = 0;
@@ -39,15 +43,19 @@ public class ZoomMultiImageClass extends Activity {
         }
 
 
-        vpZoomImages = (ViewPager) findViewById(R.id.vp_offer_images);
-        llDotsOfferImages = (LinearLayout) findViewById(R.id.ll_dots);
-        back_btn = (ImageView) findViewById(R.id.back_btn);
+        ViewPager vpZoomImages = findViewById(R.id.vp_offer_images);
+        vpZoomImages.setAdapter(new ZoomMultiImagePagerAdapter(ZoomMultiImageClass.this,vpZoomImages,imageUrls, getSettingsController()));
+       // vpZoomImages.requestDisallowInterceptTouchEvent(true);
+
+        llDotsOfferImages = findViewById(R.id.ll_dots);
+        ImageView back_btn = findViewById(R.id.back_btn);
 
 
-        zoomMultiImagePagerAdapter = new ZoomMultiImagePagerAdapter(ZoomMultiImageClass.this, imageUrls );
-        vpZoomImages.setAdapter(zoomMultiImagePagerAdapter);
+      //  ZoomMultiImagePagerAdapter2 zoomMultiImagePagerAdapter = new ZoomMultiImagePagerAdapter2(ZoomMultiImageClass.this,vpZoomImages, offerUrls);
 
-        vpZoomImages.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+      //  vpZoomImages.setAdapter(zoomMultiImagePagerAdapter);
+
+        vpZoomImages.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -55,7 +63,7 @@ public class ZoomMultiImageClass extends Activity {
 
             @Override
             public void onPageSelected(int position) {
-                //addBottomDots(position);
+                addBottomDots(position);
             }
 
             @Override
@@ -65,7 +73,7 @@ public class ZoomMultiImageClass extends Activity {
         });
 
 
-       // addBottomDots(0);
+        addBottomDots(0);
 
         vpZoomImages.setCurrentItem(pos, true);
 
@@ -79,9 +87,13 @@ public class ZoomMultiImageClass extends Activity {
         );
     }
 
+    protected SettingsController getSettingsController() {
+        return settingsMenu;
+    }
+
 
     private void addBottomDots(int currentPage) {
-        dots = new TextView[imageUrls .size()];
+        TextView[] dots = new TextView[imageUrls.size()];
 
         llDotsOfferImages.removeAllViews();
         for (int i = 0; i < dots.length; i++) {
