@@ -22,26 +22,18 @@ public class Constants {
     public static String UserActivityImgPath = IMAGE_BASE_URL + "Upload/" + CLIENT_NAME + "/UserActivity/";
     public static String RecognitionImgPath = IMAGE_BASE_URL + "Upload/" + CLIENT_NAME + "/RecognitionImages/";
     public static String IdeaImgPath = IMAGE_BASE_URL + "Upload/" + CLIENT_NAME + "/IdeaImages/";
-    public static String MainImageUploadPath="/Upload/" ;
-    public static String MainImagePath="/Upload/" ;
-    public static String UserActivityUploadPath="/UserActivity/" ;
-    public static String UserImageUploadPath="/UserImages/" ;
-    public static String TeamImageUploadPath="/TeamImages/" ;
-    public static String RecogImageUploadPath="/RecognitionImages/" ;
-    public static String IdeaImageUploadPath="/IdeaImages/" ;
-    public static String NoImage="No-Image.jpg" ;
-    public static String NoImageContentType="image/jpeg" ;
+    public static String MainImageUploadPath = "/Upload/";
+    public static String MainImagePath = "/Upload/";
+    public static String UserActivityUploadPath = "/UserActivity/";
+    public static String UserImageUploadPath = "/UserImages/";
+    public static String TeamImageUploadPath = "/TeamImages/";
+    public static String RecogImageUploadPath = "/RecognitionImages/";
+    public static String IdeaImageUploadPath = "/IdeaImages/";
+    public static String NoImage = "No-Image.jpg";
+    public static String NoImageContentType = "image/jpeg";
     public static String defaultAvatar = "user.png";
     public static final int PAGE_SIZE = 25;
     public static final String STATUS_CODE_SUCCESS = "200";
-
-
-
-
-
-
-
-
 
 
     public static String keyLoginCheck = "keyLoginCheck";
@@ -78,4 +70,5 @@ public class Constants {
     public static String error_msg_select_value = "Please select a value to continue";
     public static String error_msg_select_points = "Please select kudos point to continue";
     public static String error_msg_supporting_text = "Please enter supporting text to continue";
+    public static String isPostUpdated = "keyIsPostUpdated";
 }

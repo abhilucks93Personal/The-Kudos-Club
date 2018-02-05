@@ -456,7 +456,7 @@ public class RetrofitApi {
                                   final ResponseListener _mlistener_response,
                                   int userId,
                                   int reasonId,
-                                  int rewardId,
+                                  String rewardId,
                                   String valueTitle,
                                   String supportingText) {
 

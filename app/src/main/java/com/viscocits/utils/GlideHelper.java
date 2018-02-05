@@ -101,11 +101,9 @@ public class GlideHelper {
         // We don't want Glide to crop or resize our image
         final RequestOptions options = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .override(Target.SIZE_ORIGINAL)
-                .bitmapTransform(new CircleTransform(activity))
+                .circleCropTransform()
                 .placeholder(R.drawable.image_thumb)
-                .error(R.drawable.image_thumb)
-                .dontTransform();
+                .error(R.drawable.image_thumb);
 
 
         RequestBuilder<Drawable> requestBuilder = Glide.with(image)

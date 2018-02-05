@@ -38,7 +38,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.viscocits.R;
 import com.viscocits.home_recognize.model.ModelResponseKudosPoints;
@@ -96,7 +95,7 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
     ModelResponseKudosPointsData modelResponseKudosPointsData;
     ModelResponseUsersListData selectedUserData;
 
-    ModelResponseValuesListData selectedValue;
+    ArrayList<ModelResponseValuesListData> selectedValue;
     String selectedPoint = "";
     private Uri mCapturedImageURI;
     private Uri mImageUri = null;
@@ -217,10 +216,17 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
             return;
         }
 
-        int rewardId;
-        if (selectedValue != null)
-            rewardId = selectedValue.getReward_Id();
-        else {
+        String rewardId = "";
+        if (selectedValue != null && selectedValue.size() > 0) {
+            int index = 0;
+            for (ModelResponseValuesListData model : selectedValue) {
+                rewardId = rewardId + model.getReward_Id();
+                if (index != selectedValue.size() - 1)
+                    rewardId = rewardId + ",";
+                index++;
+            }
+
+        } else {
             Utility.showToast(getActivity(), Constants.error_msg_select_value);
             return;
         }
@@ -319,6 +325,7 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
         } else if (obj instanceof ModelResponseRecognitionSubmit) {
             ModelResponseRecognitionSubmit modelResponseRecognitionSubmit = (ModelResponseRecognitionSubmit) obj;
             if (modelResponseRecognitionSubmit.getStatusCode().equals(Constants.STATUS_CODE_SUCCESS)) {
+                Utility.addPreferences(getActivity(),Constants.isPostUpdated,true);
                 recognitionId = modelResponseRecognitionSubmit.getData();
                 showImageDialog();
 
@@ -326,11 +333,10 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
         } else if (obj instanceof ModelResponseRecognitionImage) {
             ModelResponseRecognitionImage modelResponseRecognitionImage = (ModelResponseRecognitionImage) obj;
             if (modelResponseRecognitionImage.getStatusCode().equals(Constants.STATUS_CODE_SUCCESS)) {
-                endRecognition(true);
             } else {
                 Utility.showToast(getActivity(), "Something went wrong!\n" + modelResponseRecognitionImage.getStatusMsg());
-                showImageDialog();
             }
+            endRecognition(true);
         }
     }
 
@@ -393,8 +399,7 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
 
         spinnerReasons.setSelection(0);
 
-
-        selectedValue = null;
+        selectedValue.clear();
         selected_position = -1;
         notifyCheckBoxes();
 
@@ -402,6 +407,7 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
 
         etComment.setText("");
 
+        isDialogClicked = false;
 
         if (isSwitchTab)
             ((MainActivity) getActivity()).switchTab(0);
@@ -563,9 +569,10 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
     }
 
     private void setValuesData() {
+        selectedValue = new ArrayList<>();
         int index = 0;
         for (final ModelResponseValuesListData listData : modelResponseValuesListData) {
-            final int pos = index;
+
             AppCompatCheckBox checkBox = new AppCompatCheckBox(getActivity());
             checkBox.setId(index);
             checkBox.setHighlightColor(getResources().getColor(R.color.tab_background_selected));
@@ -575,16 +582,12 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-
                     if (isChecked) {
-                        selected_position = pos;
-                        selectedValue = listData;
+                        selectedValue.add(listData);
                     } else {
-                        selected_position = -1;
-                        selectedValue = null;
+                        selectedValue.remove(listData);
                     }
 
-                    notifyCheckBoxes();
 
                 }
             });
@@ -597,13 +600,11 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
 
     private void notifyCheckBoxes() {
 
-        int index = 0;
+
         for (CheckBox checkBox : valueCheckBoxes) {
-            if (selected_position == index)
-                checkBox.setChecked(true);
-            else
-                checkBox.setChecked(false);
-            index++;
+
+            checkBox.setChecked(false);
+
         }
     }
 

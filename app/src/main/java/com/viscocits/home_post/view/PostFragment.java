@@ -53,6 +53,17 @@ public class PostFragment extends Fragment implements View.OnClickListener, Adap
     private LinearLayoutManager mLayoutManager;
     private SwipeRefreshLayout activity_main_swipe_refresh_layout;
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+      //  boolean isPostUpdated = Utility.getPreferences(getContext(), Constants.isPostUpdated, false);
+        if (isVisibleToUser &&  engagementList.size() > 0) {
+            pageNum = 1;
+            getWallPostData();
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -126,6 +137,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, Adap
     }
 
     private void getEngagementFilterList() {
+        Utility.addPreferences(getActivity(), Constants.isPostUpdated, false);
         RetrofitApi.getInstance().getEngagementFilterList(getActivity(), this);
     }
 
@@ -244,6 +256,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, Adap
                 updateCountryList(countryFilterList.getData());
             }
         } else if (obj instanceof ModelResponseWallPost) {
+            Utility.addPreferences(getActivity(), Constants.isPostUpdated, false);
             loading = true;
             progressBarPagination.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);

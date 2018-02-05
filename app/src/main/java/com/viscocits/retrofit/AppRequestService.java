@@ -98,7 +98,7 @@ public interface AppRequestService {
     @POST("SaveRecognitionWithReturnId")
     Observable<ModelResponseRecognitionSubmit> submitRecognition(@Field("User_ID") int userId,
                                                                  @Field("RecognitionReason_ID") int reasonId,
-                                                                 @Field("RecognitionReason_ID") int rewardId,
+                                                                 @Field("RecognitionReason_ID") String rewardId,
                                                                  @Field("SupportingText") String supportingText,
                                                                  @Field("IsActive") boolean b,
                                                                  @Field("ClientId") String clientId,
