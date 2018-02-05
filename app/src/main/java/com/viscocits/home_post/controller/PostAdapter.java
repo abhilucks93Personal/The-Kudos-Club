@@ -32,6 +32,7 @@ import com.viscocits.home_post.view.ImageListActivity;
 import com.viscocits.other.CircleTransform;
 import com.viscocits.retrofit.RetrofitApi;
 import com.viscocits.utils.Constants;
+import com.viscocits.utils.GlideHelper;
 import com.viscocits.utils.Utility;
 import com.viscocits.utils.zoom.ZoomMultiImageClass;
 
@@ -114,18 +115,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         final ModelPostMergedData postData = postDataList.get(position);
 
 
-        Glide.with(context).load(postData.getAvatarExt())
+       /* Glide.with(context).load(postData.getAvatarExt())
                 .crossFade()
                 .thumbnail(0.5f)
                 .placeholder(R.drawable.image_placeholder)
                 .error(R.drawable.image_placeholder)
                 .bitmapTransform(new CircleTransform(context))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.ivProfile);
+                .into(holder.ivProfile);*/
+
+        GlideHelper.loadProfileImageUrl(context, holder.ivProfile, postData.getAvatarExt());
 
         holder.tvName.setText(postData.getName());
 
-        holder.tvDuration.setText(Utility.getFormattedPostDate(postData.getPostedDate()));
+        if (postData.getPostedDate() != null)
+            holder.tvDuration.setText(Utility.getFormattedPostDate(postData.getPostedDate()));
 
 
         setPostColorAndLogo(holder.tvDuration, holder.ivLogo, postData.getPostType());

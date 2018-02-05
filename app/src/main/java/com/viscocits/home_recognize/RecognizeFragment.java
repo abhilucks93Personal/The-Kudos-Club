@@ -1,20 +1,36 @@
 package com.viscocits.home_recognize;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.ContentValues;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatRadioButton;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
@@ -22,6 +38,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 import com.viscocits.R;
 import com.viscocits.home_recognize.model.ModelResponseKudosPoints;
 import com.viscocits.home_recognize.model.ModelResponseKudosPointsData;
@@ -29,16 +47,31 @@ import com.viscocits.home_recognize.model.ModelResponsePointsList;
 import com.viscocits.home_recognize.model.ModelResponsePointsListData;
 import com.viscocits.home_recognize.model.ModelResponseReasonsList;
 import com.viscocits.home_recognize.model.ModelResponseReasonsListData;
+import com.viscocits.home_recognize.model.ModelResponseRecognitionImage;
 import com.viscocits.home_recognize.model.ModelResponseRecognitionSubmit;
 import com.viscocits.home_recognize.model.ModelResponseUsersList;
 import com.viscocits.home_recognize.model.ModelResponseUsersListData;
 import com.viscocits.home_recognize.model.ModelResponseValuesList;
 import com.viscocits.home_recognize.model.ModelResponseValuesListData;
+import com.viscocits.navigation.MainActivity;
 import com.viscocits.retrofit.RetrofitApi;
 import com.viscocits.utils.Constants;
 import com.viscocits.utils.Utility;
+import com.viscocits.utils.crop.CropActivity;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
+
+import static android.app.Activity.RESULT_OK;
+import static com.viscocits.utils.Constants.REQUEST_CAMERA;
+import static com.viscocits.utils.Constants.SELECT_FILE;
+import static com.viscocits.utils.Constants.cameraPermission;
+import static com.viscocits.utils.Constants.cameraRequestCode;
+import static com.viscocits.utils.Constants.galleryRequestCode;
+import static com.viscocits.utils.Constants.readExternalPermission;
+import static com.viscocits.utils.Constants.writeExternalPermission;
 
 
 /**
@@ -65,7 +98,23 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
 
     ModelResponseValuesListData selectedValue;
     String selectedPoint = "";
+    private Uri mCapturedImageURI;
+    private Uri mImageUri = null;
+    private int selected_position = -1;
 
+    boolean isDataLoaded;
+    private long recognitionId = -1;
+    private Dialog dialog;
+    private boolean isDialogClicked;
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && getActivity() != null && isAdded() && isDataLoaded) {
+            endRecognition(false);
+
+        }
+    }
 
     @Nullable
     @Override
@@ -102,7 +151,6 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
 
     private void initUi() {
 
-        Utility.addPreferences(getActivity(), Constants.P_KEY_USER_ID, "11");
 
         getData();
     }
@@ -188,6 +236,12 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
 
         String supportingText = etComment.getText().toString().trim();
 
+        if (supportingText.length() == 0) {
+            Utility.showToast(getActivity(), Constants.error_msg_supporting_text);
+            return;
+        }
+
+
         RetrofitApi.getInstance().submitRecognition(getActivity(),
                 this,
                 userId, reasonId, rewardId, valueTitle, supportingText);
@@ -260,22 +314,212 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
                 setPointsData();
                 progressBar.setVisibility(View.GONE);
                 llMain.setVisibility(View.VISIBLE);
+                isDataLoaded = true;
             }
         } else if (obj instanceof ModelResponseRecognitionSubmit) {
             ModelResponseRecognitionSubmit modelResponseRecognitionSubmit = (ModelResponseRecognitionSubmit) obj;
             if (modelResponseRecognitionSubmit.getStatusCode().equals(Constants.STATUS_CODE_SUCCESS)) {
-                long recognitionId = modelResponseRecognitionSubmit.getData();
-                showImageDialog(recognitionId);
+                recognitionId = modelResponseRecognitionSubmit.getData();
+                showImageDialog();
 
+            }
+        } else if (obj instanceof ModelResponseRecognitionImage) {
+            ModelResponseRecognitionImage modelResponseRecognitionImage = (ModelResponseRecognitionImage) obj;
+            if (modelResponseRecognitionImage.getStatusCode().equals(Constants.STATUS_CODE_SUCCESS)) {
+                endRecognition(true);
+            } else {
+                Utility.showToast(getActivity(), "Something went wrong!\n" + modelResponseRecognitionImage.getStatusMsg());
+                showImageDialog();
             }
         }
     }
 
-    private void showImageDialog(long recognitionId) {
+    private void showImageDialog() {
+
+
+        dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_dialo_image_recognition);
+
+        Window window = dialog.getWindow();
+        if (window != null)
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        TextView tvCamera = dialog.findViewById(R.id.tv_camera);
+        tvCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fetchCameraImage();
+            }
+
+
+        });
+        TextView tvGallery = dialog.findViewById(R.id.tv_gallery);
+        tvGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fetchGalleryImage();
+            }
+
+
+        });
+        ImageView ivCross = dialog.findViewById(R.id.iv_cross);
+        ivCross.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                endRecognition(true);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                if (!isDialogClicked)
+                    endRecognition(false);
+            }
+        });
+
+        dialog.show();
 
 
     }
 
+    private void endRecognition(boolean isSwitchTab) {
+        mImageUri = null;
+
+        actSearch.setText("");
+        selectedUserData = null;
+
+        spinnerReasons.setSelection(0);
+
+
+        selectedValue = null;
+        selected_position = -1;
+        notifyCheckBoxes();
+
+        selectedPoint = modelResponsePointsListData.get(0).getValueTitle();
+
+        etComment.setText("");
+
+
+        if (isSwitchTab)
+            ((MainActivity) getActivity()).switchTab(0);
+
+    }
+
+    private void fetchCameraImage() {
+
+        if (Utility.checkPermissions(getActivity(), readExternalPermission, writeExternalPermission, cameraPermission)) {
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.MediaColumns.TITLE, getActivity().getPackageName());
+            mCapturedImageURI = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            cameraIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCapturedImageURI);
+            startActivityForResult(cameraIntent, REQUEST_CAMERA);
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{readExternalPermission, writeExternalPermission, cameraPermission}, cameraRequestCode);
+        }
+    }
+
+    private void fetchGalleryImage() {
+
+        if (Utility.checkPermissions(getActivity(), readExternalPermission, writeExternalPermission, cameraPermission)) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);//
+            startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{readExternalPermission, writeExternalPermission, cameraPermission}, galleryRequestCode);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+
+            case 51:
+                if (ActivityCompat.checkSelfPermission(getActivity(), permissions[0]) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), permissions[1]) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), permissions[2]) == PackageManager.PERMISSION_GRANTED) {
+                    fetchGalleryImage();
+                }
+                break;
+
+            case 52:
+                if (ActivityCompat.checkSelfPermission(getActivity(), permissions[0]) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), permissions[1]) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), permissions[2]) == PackageManager.PERMISSION_GRANTED) {
+                    fetchCameraImage();
+                }
+                break;
+
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+
+
+            case 100:
+                if (resultCode == RESULT_OK) {
+
+                    startActivityForResult(new Intent(getActivity(), CropActivity.class)
+                            .putExtra("uri", mCapturedImageURI), 500);
+                }
+                break;
+
+
+            case 200:
+
+                if (resultCode == RESULT_OK) {
+                    Uri imageUri = CropImage.getPickImageResultUri(getActivity(), data);
+                    startActivityForResult(new Intent(getActivity(), CropActivity.class)
+                            .putExtra("uri", imageUri), 500);
+                }
+                break;
+
+
+            case 500:
+                if (resultCode == RESULT_OK) {
+
+                    mImageUri = data.getParcelableExtra("URI");
+                    if (mImageUri != null && recognitionId >= 0)
+                        uploadImageRecognition();
+
+                }
+                break;
+        }
+
+    }
+
+    private void uploadImageRecognition() {
+
+        if (dialog != null && dialog.isShowing()) {
+            isDialogClicked = true;
+            dialog.dismiss();
+        }
+
+        final InputStream imageStream;
+        try {
+            imageStream = getActivity().getContentResolver().openInputStream(mImageUri);
+            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            String encodedImage = encodeImage(selectedImage);
+            RetrofitApi.getInstance().uploadImageRecognition(getActivity(), this, encodedImage, recognitionId);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private String encodeImage(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String encImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+        return encImage;
+    }
 
     private void setKudosPointsData() {
         int kudosPoints = modelResponseKudosPointsData.getRecoRecivedBalanceTime() + modelResponseKudosPointsData.getInnovationRecivedBalanceTime();
@@ -318,28 +562,30 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-
     private void setValuesData() {
         int index = 0;
         for (final ModelResponseValuesListData listData : modelResponseValuesListData) {
-
+            final int pos = index;
             AppCompatCheckBox checkBox = new AppCompatCheckBox(getActivity());
             checkBox.setId(index);
             checkBox.setHighlightColor(getResources().getColor(R.color.tab_background_selected));
             checkBox.setText(listData.getRewardTitle());
-            if (index == 0)
-                checkBox.setChecked(true);
+
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    for (CheckBox checkBox1 : valueCheckBoxes) {
-                        checkBox1.setChecked(false);
-                    }
+
+
                     if (isChecked) {
+                        selected_position = pos;
                         selectedValue = listData;
                     } else {
+                        selected_position = -1;
                         selectedValue = null;
                     }
+
+                    notifyCheckBoxes();
+
                 }
             });
             valueCheckBoxes.add(checkBox);
@@ -347,6 +593,18 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
             index++;
         }
 
+    }
+
+    private void notifyCheckBoxes() {
+
+        int index = 0;
+        for (CheckBox checkBox : valueCheckBoxes) {
+            if (selected_position == index)
+                checkBox.setChecked(true);
+            else
+                checkBox.setChecked(false);
+            index++;
+        }
     }
 
     private void setReasonsData() {

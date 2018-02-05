@@ -14,6 +14,7 @@ import com.viscocits.R;
 import com.viscocits.home_post.model.ModelCommentsData;
 import com.viscocits.home_post.model.postModels.ModelPostComments;
 import com.viscocits.other.CircleTransform;
+import com.viscocits.utils.GlideHelper;
 import com.viscocits.utils.Utility;
 
 import java.util.List;
@@ -70,16 +71,17 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
 
         holder.tvComment.setText(commentsData.getMessage());
 
-        holder.tvDuration.setText(Utility.getFormattedPostDate(commentsData.getCommentedDate()));
+        if (commentsData.getCommentedDate() != null)
+            holder.tvDuration.setText(Utility.getFormattedPostDate(commentsData.getCommentedDate()));
 
-
-        Glide.with(context).load(commentsData.getAvatarExt())
+        GlideHelper.loadProfileImageUrl(context, holder.ivProfile, commentsData.getAvatarExt());
+     /*   Glide.with(context).load(commentsData.getAvatarExt())
                 .crossFade()
                 .thumbnail(0.5f)
                 .error(R.drawable.image_thumb)
                 .bitmapTransform(new CircleTransform(context))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.ivProfile);
+                .into(holder.ivProfile);*/
 
         holder.convertView.setOnClickListener(new View.OnClickListener() {
             @Override

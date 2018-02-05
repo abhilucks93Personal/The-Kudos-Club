@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">avinity alive</string>
+    <string name="app_name">Avinity Alive</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -48,5 +48,12 @@ When you receive nominations, these will fill up your recognition pillar. As soo
 
     <string name="challenge_info">The Kudos Club rewards you for getting involved.\n\nBy completing challenges you can fill up our Value pillars. Once a pillar is full, you earn yourself Kudos Points to spend in our online reward catalogue. The challenges are split between Easy, Medium and Difficult, depending on the amount of time involved. You can also choose between taking a challenge yourself or work with your team.\n\nThe challenges show the % of that Value Pillar you will fill once you complete the activity, so go on; pick a few now that you will commit to do, and good luck.</string>
     <string name="content_recognize_header">Recognition nominations can either be £0 value e-cards, or nominees can receive time/points to redeem against the catalogue. You decide.</string>
+
+
+    <string name="main_action_crop">CROP</string>
+    <string name="main_action_rotate">Rotate 90 degrees clockwise</string>
+    <string name="result_image_desc">crop result</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_ok">Ok</string>
 
 </resources>

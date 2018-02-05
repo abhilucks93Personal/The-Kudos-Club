@@ -3,6 +3,9 @@
     package="com.viscocits">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -55,6 +58,16 @@
         <activity android:name=".utils.zoom.ZoomMultiImageClass" />
 
         <activity android:name=".home_post.view.ImageListActivity" />
+
+        <activity
+            android:name=".utils.crop.CropActivity"
+            android:theme="@style/MyTheme" />
+
+        <activity
+            android:name=".utils.crop.CropPreviewActivity"
+            android:theme="@style/MyTheme" />
+
+
     </application>
 
 </manifest>

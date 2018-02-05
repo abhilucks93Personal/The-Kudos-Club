@@ -7,8 +7,10 @@ import com.viscocits.home_post.model.ModelResponseCountryFilterList;
 import com.viscocits.home_post.model.ModelResponseEngagementFilterList;
 import com.viscocits.home_post.model.getPostResponse.ModelResponseWallPost;
 import com.viscocits.home_recognize.model.ModelResponseKudosPoints;
+import com.viscocits.home_recognize.model.ModelResponseLogin;
 import com.viscocits.home_recognize.model.ModelResponsePointsList;
 import com.viscocits.home_recognize.model.ModelResponseReasonsList;
+import com.viscocits.home_recognize.model.ModelResponseRecognitionImage;
 import com.viscocits.home_recognize.model.ModelResponseRecognitionSubmit;
 import com.viscocits.home_recognize.model.ModelResponseUsersList;
 import com.viscocits.home_recognize.model.ModelResponseValuesList;
@@ -102,4 +104,21 @@ public interface AppRequestService {
                                                                  @Field("ClientId") String clientId,
                                                                  @Field("CreatedBy") String mUserId,
                                                                  @Field("ValueTitle") String valueTitle);
+
+    @FormUrlEncoded
+    @POST("UserLogin")
+    Observable<ModelResponseLogin> logIn(@Field("Username") String strUserName,
+                                         @Field("Password") String strPassword,
+                                         @Field("ClientID") String clientId);
+
+    @FormUrlEncoded
+    @POST("UserLogin")
+    Observable<ModelResponseRecognitionImage>  uploadImageRecognition(@Field("ClientName") String clientName,
+                                                                      @Field("F_Name")  String name,
+                                                                      @Field("RecogID") long recognitionId,
+                                                                      @Field("UserId") String mUserId,
+                                                                      @Field("Client_Id") String clientId,
+                                                                      @Field("ImgStr") String encodedImage,
+                                                                      @Field("MainImageUploadPath") String mainImageUploadPath,
+                                                                      @Field("RecogImageUploadPath") String recogImageUploadPath);
 }

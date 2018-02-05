@@ -1,0 +1,18 @@
+<com.theartofdev.edmodo.cropper.CropImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cropImageView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorGrey"
+    app:cropBackgroundColor="#88000000"
+    app:cropBorderCornerColor="@color/colorWhite"
+    app:cropBorderCornerOffset="0dp"
+    app:cropBorderCornerThickness="5dp"
+    app:cropBorderLineColor="@color/colorGrey"
+    app:cropBorderLineThickness="1dp"
+    app:cropGuidelines="on"
+    app:cropGuidelinesColor="@color/colorWhite"
+    app:cropInitialCropWindowPaddingRatio="0"
+    app:cropSnapRadius="0dp" />
+
+    <!---->

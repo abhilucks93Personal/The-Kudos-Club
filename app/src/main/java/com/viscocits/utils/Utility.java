@@ -24,6 +24,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
@@ -66,6 +67,8 @@ import java.util.Random;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import id.zelory.compressor.Compressor;
 
 import static android.content.ContentValues.TAG;
 
@@ -133,16 +136,28 @@ public class Utility {
         return uri;
     }
 
-   /* public static Uri getCompressedUriFromFile(Activity context, Bitmap bMap) {
-        String path1 = MediaStore.Images.Media.insertImage(context.getContentResolver(), bMap, "Title", null);
-        File file1 = new File(Uri.parse(path1).getPath());
 
-        //  File compressedImageFile = Compressor.getDefault(context).compressToFile(new File(uri.getPath()));
-        Bitmap compressedImageBitmap = Compressor.getDefault(context).compressToBitmap(file1);
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), compressedImageBitmap, "Title", null);
-
-        return Uri.parse(path);
-    }*/
+    @Nullable
+    public static Uri saveBitmapToDisk(Context context, Bitmap bmp) {
+        Uri finalUri = null;
+        File file = new File(context.getFilesDir(), "Image" + new Random().nextInt() + ".png");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 80, bytes);
+        try {
+            file.createNewFile();
+            boolean wasSuccessful = file.createNewFile();
+            if (!wasSuccessful)
+                Log.e("error", "failed");
+            FileOutputStream fo = new FileOutputStream(file);
+            fo.write(bytes.toByteArray());
+            fo.close();
+            File file1 = new Compressor(context).compressToFile(file);
+            finalUri = Uri.fromFile(file1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return finalUri;
+    }
 
     public static String getRealPathFromUri(Context mContext, Uri mUri) {
         String[] proj = {MediaStore.Images.Media.DATA};
@@ -431,54 +446,56 @@ public class Utility {
             e.printStackTrace();
         }
 
-        long different = startDate.getTime() - endDate.getTime();
+        if (endDate != null) {
+            long different = startDate.getTime() - endDate.getTime();
 
 
-        long secondsInMilli = 1000;
-        long minutesInMilli = secondsInMilli * 60;
-        long hoursInMilli = minutesInMilli * 60;
-        long daysInMilli = hoursInMilli * 24;
+            long secondsInMilli = 1000;
+            long minutesInMilli = secondsInMilli * 60;
+            long hoursInMilli = minutesInMilli * 60;
+            long daysInMilli = hoursInMilli * 24;
 
-        long elapsedDays = different / daysInMilli;
-        different = different % daysInMilli;
+            long elapsedDays = different / daysInMilli;
+            different = different % daysInMilli;
 
-        long elapsedHours = different / hoursInMilli;
-        different = different % hoursInMilli;
+            long elapsedHours = different / hoursInMilli;
+            different = different % hoursInMilli;
 
-        long elapsedMinutes = different / minutesInMilli;
-        different = different % minutesInMilli;
+            long elapsedMinutes = different / minutesInMilli;
+            different = different % minutesInMilli;
 
-        long elapsedSeconds = different / secondsInMilli;
+            long elapsedSeconds = different / secondsInMilli;
 
-        System.out.printf(
-                "%d days, %d hours, %d minutes, %d seconds%n",
-                elapsedDays,
-                elapsedHours, elapsedMinutes, elapsedSeconds);
-        if (elapsedDays > 0) {
-            updatedTime.append(elapsedDays + " days ago");
-            return updatedTime.toString();
+            System.out.printf(
+                    "%d days, %d hours, %d minutes, %d seconds%n",
+                    elapsedDays,
+                    elapsedHours, elapsedMinutes, elapsedSeconds);
+            if (elapsedDays > 0) {
+                updatedTime.append(elapsedDays + " days ago");
+                return updatedTime.toString();
 
-        }
-        if (elapsedHours > 0) {
-            updatedTime.append(elapsedHours + " hour ago");
-            return updatedTime.toString();
-
-
-        }
-        if (elapsedMinutes > 0) {
-            updatedTime.append(elapsedMinutes + " minutes ago");
-            return updatedTime.toString();
+            }
+            if (elapsedHours > 0) {
+                updatedTime.append(elapsedHours + " hour ago");
+                return updatedTime.toString();
 
 
-        }
-        if (elapsedSeconds > 0) {
-            updatedTime.append(elapsedSeconds + " seconds ago");
-            return updatedTime.toString();
+            }
+            if (elapsedMinutes > 0) {
+                updatedTime.append(elapsedMinutes + " minutes ago");
+                return updatedTime.toString();
 
 
-        }
-        return "Just now";
+            }
+            if (elapsedSeconds > 0) {
+                updatedTime.append(elapsedSeconds + " seconds ago");
+                return updatedTime.toString();
 
+
+            }
+            return "Just now";
+        } else
+            return "";
     }
 
     public static boolean isInteger(String s) {

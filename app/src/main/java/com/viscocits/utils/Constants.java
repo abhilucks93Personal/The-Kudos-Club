@@ -1,5 +1,7 @@
 package com.viscocits.utils;
 
+import android.Manifest;
+
 /**
  * Created by abhi on 31/07/17.
  */
@@ -7,24 +9,51 @@ package com.viscocits.utils;
 public class Constants {
 
     public static final String CLIENT_ID = "11";
-    public static final String P_KEY_USER_ID = "userId";
 
-    public static String IMAGE_BASE_URL = "http://gvc.aviniti.org/";
-    public static String CLIENT_NAME = "GVC";
 
     //public static String IMAGE_BASE_URL = "http://121hours.co.uk/";
     //public static String CLIENT_NAME = "AvinityLive";
+
+    public static String CLIENT_NAME = "GVC";
+    public static String IMAGE_BASE_URL = "http://gvc.aviniti.org/";
+
 
     public static String UserImgPath = IMAGE_BASE_URL + "Upload/" + CLIENT_NAME + "/UserImages/";
     public static String UserActivityImgPath = IMAGE_BASE_URL + "Upload/" + CLIENT_NAME + "/UserActivity/";
     public static String RecognitionImgPath = IMAGE_BASE_URL + "Upload/" + CLIENT_NAME + "/RecognitionImages/";
     public static String IdeaImgPath = IMAGE_BASE_URL + "Upload/" + CLIENT_NAME + "/IdeaImages/";
+    public static String MainImageUploadPath="/Upload/" ;
+    public static String MainImagePath="/Upload/" ;
+    public static String UserActivityUploadPath="/UserActivity/" ;
+    public static String UserImageUploadPath="/UserImages/" ;
+    public static String TeamImageUploadPath="/TeamImages/" ;
+    public static String RecogImageUploadPath="/RecognitionImages/" ;
+    public static String IdeaImageUploadPath="/IdeaImages/" ;
+    public static String NoImage="No-Image.jpg" ;
+    public static String NoImageContentType="image/jpeg" ;
     public static String defaultAvatar = "user.png";
     public static final int PAGE_SIZE = 25;
     public static final String STATUS_CODE_SUCCESS = "200";
 
+
+
+
+
+
+
+
+
+
     public static String keyLoginCheck = "keyLoginCheck";
     public static String MSG_UNDER_CONSTRUCTION = "Functionality under development!";
+
+    public static String readExternalPermission = Manifest.permission.READ_EXTERNAL_STORAGE;
+    public static String writeExternalPermission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+    public static String cameraPermission = Manifest.permission.CAMERA;
+    public static final int SELECT_FILE = 200;
+    public static final int REQUEST_CAMERA = 100;
+    public static int galleryRequestCode = 51;
+    public static int cameraRequestCode = 52;
 
     public static String PROGRAMME_T_C_CONTENT =
             "<p><strong>Kudos Club Terms and Conditions</strong>&nbsp;<br />The Kudos Club is a GVC sponsored recognition and values platform, whereby rewards:<br />Kudos Points may be earned by completing challenges and filling a Value Pillar, and redeemed in exchange for the acquisition of goods and services (the &ldquo;Goods&rdquo;).&nbsp;<br />Time may be awarded by colleagues recognising each other for living our values and redeemed with approval of the individual User&rsquo;s Line Manager via Leave Management System at their location.&nbsp;<br /><br />Access to The Kudos Club is granted at the discretion and approval of GVC subject to the User&rsquo;s acceptance of the website terms and conditions.&nbsp;<br /><br />The Kudos Club and Online Catalogue is managed and operated by Avinity; whose Registered Office is at AV House, Unit 4 Farmbrough Close, Aylesbury, HP20 1DQ (a Company Registered in England, No. 05522883).&nbsp;<br /><br /><strong>1. Use of Site<br /></strong>1.1 The User agrees that GVC and Avinity may contact them concerning their User Account and any redemption transactions entered into, as well as surveys, news and important announcements as they occur from time to time.&nbsp;<br /><br />1.2 Users will be entirely responsible for maintaining the confidentiality of their User ID and password.&nbsp;<br />Users will be entirely responsible and accountable for all activities, posts and comments that occur under their User ID and password. Users will have the responsibility to notify Reward team immediately of any unauthorized use of their User ID or any breach of security known to them.&nbsp;<br /><br />1.3 Users will refrain from any activity that could be perceived as ongoing nuisance, malicious, libellous, defamatory, obscene, pornographic, or harassing. GVC reserve the right to immediately terminate a User&rsquo;s access to The Kudos Club if their conduct is found to be inconsistent with these terms and conditions by giving the User written notice. This action may be taken immediately without recourse to the User, and may involve litigation. GVC and Avinity do not warrant or accept liability for any offensive activity posted by individuals.&nbsp;<br /><br />1.4 Users will have to redeem all Kudos Points and Time off which have been allocated to them before their last working date. If a User fails to redeem any Kudos Points or Time off allocated then GVC shall not be liable for any compensation in respect of any such unused Kudos Points or Time off.&nbsp;<br /><br />1.5 We make no promise that the use of the platform will be uninterrupted, timely or entirely error free.<br />We shall not be responsible for any delays in performing, or for any failure to perform, any of our obligations hereunder if the delay or failure was due to the fault of the User or an Avinity Partner or any cause beyond our reasonable control. GVC and Avinity hereby excludes liability for any claims, losses, demands or damages of any kind whatsoever with respect to the use of the platform including, without limitation, direct indirect, incidental or consequential losses or damages whether or not the possibility of such loss has been notified. The foregoing will apply whether such claims, loss or damages arise in tort, contract, negligence, under statute or otherwise. In any event nothing in this condition is intended to limit or curtail any rights you might have as a consumer under applicable local law that may not be excluded nor in any way to exclude or limit our liability to you for any death or personal injury resulting from our negligence.&nbsp;<br /><br /><strong>2. Value Champions<br /></strong>2.1 GVC shall nominate country Value Champions to act as their appointed representative of the Kudos Club and to support HR.&nbsp;&nbsp;<br /><br />2.2 These individuals shall be deemed responsible for the maintenance of engagement within their region. They will have additional administration access to the programme to upload news stories, approve completed Value Pillars and upload new Value Challenges. Any disputes about the authorisation of a completed Value Pillar should be addressed between the User, the Value Champion and GVC as appropriate.&nbsp;<br /><br />2.3 Next to HR, Value Champions are entitled to be point of contact should any individual User need additional support with the programme.&nbsp;<br /><br /><strong>3. Reward Redemption<br /></strong>3.1 Kudos Points awarded for completion of the Value Pillars have no cash redemption value other than in relation to their exchange for Goods available from the Online Catalogue, and Kudos Points cannot be exchanged, sold or transferred.&nbsp;<br /><br />3.2 The Kudos Points allocated to a unique User will be designated as the Users &ldquo;Account Balance&rdquo;. It is the User&rsquo;s responsibility to check their User Account regularly to ensure that all Kudos Points expected to be allocated have been credited and that the resultant Account Balance is accurate and conforms to their expectations. Users must inform their Value Champion or the Reward team if they identify that any Kudos Points have been inaccurately applied to their Account Balance immediately on discovery of the same.&nbsp;<br /><br />3.3 Any Kudos TimePoints awarded under the Recognition Pillar can be used only for Time off and cannot be exchanged or transferred for the online catalogue. However, the user can redeem the Kudos Points earned under the remaining Value Pillars for goods and services available from the online catalogue.&nbsp;<br /><br />3.4 The user will have to follow a two-step process to avail the Time off awarded via the Recognition nomination process. First to redeem from the Kudos Club (on redemption Time off will be added to the Leave Management system) and follow normal Leave Application process. No approval is required to redeem the Time off however availing holidays using that Time off is subject to their supervisor approval.&nbsp;<br /><br />3.5 Time off banked and retained in the Kudos Club account is valid for two years however any Time off redeemed and added to the Leave Management System is subject to the limit set by Annual Leave policy. Any Time off not redeemed or not availed within the above timeline will lapse&nbsp;<br /><br />3.6 The user can retain the Kudos Points earned by completing the Value Pillar for a maximum of 2 years, and any Kudos Points not redeemed within this timeline will lapse. It is user responsibility to redeem the Kudos point before it lapses, GVC and Avinity shall not be held responsible for failure to remind the user or to compensate on account of any lapsed Kudos Points.&nbsp;<br /><br />3.7 Kudos Points are subject to Benefit in Kind tax &amp; NI/SI depending on the user location. GVC will cover any such additional charges on behalf of the User.&nbsp;<br /><br /><strong>4. Online Catalogue, Ordering and Delivery of Goods<br /></strong>4.1 Avinity shall be entitled to debit and credit Users&rsquo;\n" +
@@ -44,8 +73,9 @@ public class Constants {
     public static String keyUserId = "keyUserId";
     public static String keyUniqueDeviceId = "keyUniqueDeviceId";
     public static String keyDeviceId = "keyDeviceId";
-    public static String error_msg_select_user="Please select a user to continue";
-    public static String error_msg_select_reason="Please select a reason to continue";
-    public static String error_msg_select_value="Please select a value to continue";
-    public static String error_msg_select_points="Please select kudos point to continue";
+    public static String error_msg_select_user = "Please select a user to continue";
+    public static String error_msg_select_reason = "Please select a reason to continue";
+    public static String error_msg_select_value = "Please select a value to continue";
+    public static String error_msg_select_points = "Please select kudos point to continue";
+    public static String error_msg_supporting_text = "Please enter supporting text to continue";
 }

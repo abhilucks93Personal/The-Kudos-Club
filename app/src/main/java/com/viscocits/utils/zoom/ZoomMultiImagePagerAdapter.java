@@ -1,60 +1,34 @@
 package com.viscocits.utils.zoom;
 
 import android.app.Activity;
-import android.content.Context;
-import android.support.v4.view.PagerAdapter;
+import android.support.annotation.NonNull;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
+import com.alexvasilkov.gestures.views.GestureImageView;
 import com.viscocits.R;
+import com.viscocits.utils.GlideHelper;
+import com.viscocits.utils.zoom.settings.SettingsController;
+
 
 import java.util.ArrayList;
 
-class ZoomMultiImagePagerAdapter extends PagerAdapter {
+class ZoomMultiImagePagerAdapter extends RecyclePagerAdapter<ZoomMultiImagePagerAdapter.ViewHolder> {
 
-    private LayoutInflater layoutInflater;
-    private Activity activity;
+    private final ViewPager viewPager;
     private ArrayList<String> image_arraylist;
+    private final SettingsController settingsController;
+    Activity activity;
 
-    public ZoomMultiImagePagerAdapter(Activity activity, ArrayList<String> image_arraylist) {
+    ZoomMultiImagePagerAdapter(Activity activity, ViewPager pager, ArrayList<String> image_arraylist, SettingsController listener) {
         this.activity = activity;
+        this.viewPager = pager;
         this.image_arraylist = image_arraylist;
-    }
-
-    @Override
-    public Object instantiateItem(final ViewGroup container, final int position) {
-        layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        final View view = layoutInflater.inflate(R.layout.layout_zoom_image_item, container, false);
-        final TouchImageView ivImage = (TouchImageView) view.findViewById(R.id.image);
-        final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressLoader);
-
-        Glide.with(activity)
-                .load(image_arraylist.get(position))
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        ivImage.setEnabled(true);
-                        progressBar.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
-                .into(ivImage);
-
-        container.addView(view);
-
-        return view;
+        this.settingsController = listener;
     }
 
     @Override
@@ -62,16 +36,50 @@ class ZoomMultiImagePagerAdapter extends PagerAdapter {
         return image_arraylist.size();
     }
 
-
     @Override
-    public boolean isViewFromObject(View view, Object obj) {
-        return view == obj;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup container) {
+
+        View layoutView = LayoutInflater.from(container.getContext()).inflate(R.layout.layout_zoom_image_item, null);
+        return new ZoomMultiImagePagerAdapter.ViewHolder(layoutView);
+
+
     }
 
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        // Applying settings from toolbar menu, see BaseExampleActivity
+
+        // Applying custom settings
+        holder.image.getController().getSettings()
+                .setMaxZoom(6f)
+                .setDoubleTapZoom(3f);
+
+        // Enabling smooth scrolling when image panning turns into ViewPager scrolling.
+        // Otherwise ViewPager scrolling will only be possible when image is in zoomed out state.
+        holder.image.getController().enableScrollInViewPager(viewPager);
+        holder.image.setBackgroundColor(activity.getResources().getColor(R.color.colorBlack));
+
+        settingsController.apply(holder.image);
+
+        GlideHelper.loadUrlFull(holder.image, holder.progressBar, image_arraylist.get(position));
+    }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        View view = (View) object;
-        container.removeView(view);
+    public void onRecycleViewHolder(@NonNull ViewHolder holder) {
+        GlideHelper.clear(holder.image);
     }
+
+    static class ViewHolder extends RecyclePagerAdapter.ViewHolder {
+        final GestureImageView image;
+        ProgressBar progressBar;
+
+        ViewHolder(View itemView) {
+
+            super(itemView);
+            image = itemView.findViewById(R.id.image);
+            progressBar = itemView.findViewById(R.id.progressLoader);
+
+        }
+    }
+
 }

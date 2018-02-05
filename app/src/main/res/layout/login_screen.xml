@@ -23,12 +23,13 @@
         android:background="#80000000"
         android:orientation="vertical"
         android:padding="@dimen/_12sdp"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <ImageView
             android:layout_width="wrap_content"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:src="@drawable/kudos_logo_small" />
+            android:src="@drawable/avinityalive_logo" />
 
         <TextView
             android:layout_width="match_parent"
@@ -37,6 +38,7 @@
             android:textColor="@color/colorWhite" />
 
         <EditText
+            android:id="@+id/et_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_4sdp"
@@ -53,6 +55,7 @@
             android:textColor="@color/colorWhite" />
 
         <EditText
+            android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_4sdp"
@@ -74,14 +77,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_6sdp"
-            android:layout_marginTop="@dimen/_6sdp"
+            android:layout_marginTop="@dimen/_12sdp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/layout_bg_kudos_point"
+                android:background="@drawable/layout_bg_login_button"
                 android:padding="@dimen/_4sdp"
                 android:text="    Login    "
                 android:textColor="@color/colorWhite"
@@ -91,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_12sdp"
-                android:background="@drawable/layout_bg_kudos_point"
+                android:background="@drawable/layout_bg_recover_button"
                 android:padding="@dimen/_4sdp"
                 android:text="Recover Password"
                 android:textColor="@color/colorWhite"

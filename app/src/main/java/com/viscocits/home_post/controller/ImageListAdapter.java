@@ -1,6 +1,7 @@
 package com.viscocits.home_post.controller;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,15 +15,18 @@ import com.squareup.picasso.Picasso;
 import com.viscocits.R;
 import com.viscocits.home_post.model.postModels.ModelPostComments;
 import com.viscocits.other.CircleTransform;
+import com.viscocits.utils.GlideHelper;
 import com.viscocits.utils.Utility;
+import com.viscocits.utils.zoom.ZoomMultiImageClass;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.MyViewHolder> {
 
     private Activity context;
-    private List<String> imageUrls;
+    private ArrayList<String> imageUrls;
     private int mLayoutResourceId;
 
 
@@ -42,7 +46,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.MyVi
     }
 
 
-    public ImageListAdapter(Activity context, int mLayoutResourceId, List<String> imageUrls) {
+    public ImageListAdapter(Activity context, int mLayoutResourceId, ArrayList<String> imageUrls) {
         this.imageUrls = imageUrls;
         this.mLayoutResourceId = mLayoutResourceId;
         this.context = context;
@@ -63,15 +67,19 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.MyVi
         final String imageUrl = imageUrls.get(position);
 
 
-        Picasso.with(context)
+       /* Picasso.with(context)
                 .load(imageUrl)
                 .placeholder(R.color.colorBlack)
-                .into(holder.ivImage);
+                .into(holder.ivImage);*/
+
+        GlideHelper.loadUrlFull(holder.ivImage, null, imageUrl);
 
         holder.convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // holder.tvRequest.setText("Request\nAccepted");
+                context.startActivity(new Intent(context, ZoomMultiImageClass.class)
+                        .putStringArrayListExtra("urls", imageUrls)
+                        .putExtra("pos", position));
             }
         });
 

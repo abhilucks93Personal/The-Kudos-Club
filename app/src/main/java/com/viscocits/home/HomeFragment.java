@@ -74,13 +74,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         tabLayout.setupWithViewPager(viewPager);
 
 
-       /* LinearLayout linearLayout = (LinearLayout) tabLayout.getChildAt(0);
-        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-        GradientDrawable drawable = new GradientDrawable();
-        drawable.setColor(Color.GRAY);
-        drawable.setSize(1, 1);
-        linearLayout.setDividerPadding(10);
-        linearLayout.setDividerDrawable(drawable);*/
+
 
     }
 
@@ -106,5 +100,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             return false;
         }
 
+    }
+
+    public void switchTab(int pos) {
+        viewPager.setCurrentItem(pos);
     }
 }

@@ -35,6 +35,7 @@ import com.viscocits.other.CircleTransform;
 import com.viscocits.sample.BlankFragment;
 import com.viscocits.support.SupportFragment;
 import com.viscocits.utils.Constants;
+import com.viscocits.utils.GlideHelper;
 import com.viscocits.utils.Utility;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText etSearchView;
     private ImageView ivNotifications;
     private TextView txtLastLogin;
+    private Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Utility.addPreferences(this, Constants.keyUserId, "216");
+
         Utility.addPreferences(this, Constants.keyUniqueDeviceId, "uniqueDeviceId");
         Utility.addPreferences(this, Constants.keyDeviceId, "DeviceId");
 
@@ -147,19 +149,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txtDesignation.setText("Technical United Kingdom");
         txtLastLogin.setText("Last Login : 09 Aug 2017");
         // loading header background image
-        Glide.with(this).load(urlNavHeaderBg)
+       /* Glide.with(this).load(urlNavHeaderBg)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imgNavHeaderBg);
+                .into(imgNavHeaderBg);*/
+
+        GlideHelper.loadImageUrl(imgNavHeaderBg, urlNavHeaderBg);
 
         // Loading profile image
-        Glide.with(this).load(urlProfileImg)
+       /* Glide.with(this).load(urlProfileImg)
                 .crossFade()
                 .thumbnail(0.5f)
                 .bitmapTransform(new CircleTransform(this))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imgProfile);
+*/
 
+        GlideHelper.loadProfileImageUrl(this, imgProfile, urlProfileImg);
         // showing dot next to notifications label
         //   navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);
     }
@@ -181,11 +187,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 // update the main content by replacing fragments
                 setNavTitle();
-                Fragment fragment = getHomeFragment();
+                currentFragment = getHomeFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                         android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+                fragmentTransaction.replace(R.id.frame, currentFragment, CURRENT_TAG);
                 fragmentTransaction.commitAllowingStateLoss();
             }
         };
@@ -376,6 +382,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
+    }
+
+    public void switchTab(int pos) {
+        if (currentFragment != null && currentFragment instanceof HomeFragment) {
+            ((HomeFragment) currentFragment).switchTab(pos);
+        }
     }
 
     @Override

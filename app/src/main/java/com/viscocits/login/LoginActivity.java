@@ -25,7 +25,11 @@ import android.widget.Toast;
 
 
 import com.viscocits.R;
+import com.viscocits.home_recognize.model.ModelResponseKudosPoints;
+import com.viscocits.home_recognize.model.ModelResponseLogin;
+import com.viscocits.home_recognize.model.ModelResponseLoginData;
 import com.viscocits.navigation.MainActivity;
+import com.viscocits.retrofit.RetrofitApi;
 import com.viscocits.utils.Constants;
 import com.viscocits.utils.Utility;
 
@@ -40,12 +44,13 @@ import java.util.Arrays;
 /**
  * Created by abhishekagarwal on 1/30/17.
  */
-public class LoginActivity extends Activity implements View.OnClickListener {
+public class LoginActivity extends Activity implements View.OnClickListener, RetrofitApi.ResponseListener {
 
 
     private LinearLayout llLogin;
     private Animation animationFadeIn;
     TextView tvLogin;
+    private EditText etUserName, etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,20 +62,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         findViewById();
 
         initAnimation();
-
-
-      /*  Boolean isLogin = Utility.getPreferences(this, Constants.keyLoginCheck, false);
-
-        if (isLogin) {
-            startActivity(new Intent(this, MainActivity.class));
-            finishAffinity();
-        } else {
-            Boolean loadAnimation = getIntent().getBooleanExtra("anim", true);
-            if (loadAnimation)
-                llLogin.startAnimation(animationFadeIn);
-            else
-                llLogin.setVisibility(View.VISIBLE);
-        }*/
 
         llLogin.setVisibility(View.VISIBLE);
 
@@ -102,9 +93,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 
     private void findViewById() {
-        llLogin = (LinearLayout) findViewById(R.id.ll_login);
+        llLogin = findViewById(R.id.ll_login);
 
-        tvLogin = (TextView) findViewById(R.id.tv_login);
+        etUserName = findViewById(R.id.et_user_name);
+
+        etPassword = findViewById(R.id.et_password);
+
+        tvLogin = findViewById(R.id.tv_login);
         tvLogin.setOnClickListener(this);
     }
 
@@ -112,13 +107,53 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_login:
-                Utility.addPreferences(LoginActivity.this, Constants.keyLoginCheck, true);
-                startActivity(new Intent(this, MainActivity.class));
-                finishAffinity();
+
+                String strUserName = etUserName.getText().toString().trim();
+                String strPassword = etPassword.getText().toString().trim();
+
+                if (strUserName.length() <= 3 || strPassword.length() <= 3) {
+                    Utility.showToast(LoginActivity.this, "Please enter valid credentials.");
+                } else {
+                    RetrofitApi.getInstance().logIn(LoginActivity.this, this, strUserName, strPassword);
+                }
+
+
                 break;
 
         }
     }
 
 
+    @Override
+    public void _onCompleted() {
+
+    }
+
+    @Override
+    public void _onError(Throwable e) {
+    }
+
+    @Override
+    public void _onNext(Object obj) {
+        if (obj instanceof ModelResponseLogin) {
+            ModelResponseLogin modelResponseLogin = (ModelResponseLogin) obj;
+            switch (modelResponseLogin.getStatusCode()) {
+                case Constants.STATUS_CODE_SUCCESS:
+                    ModelResponseLoginData modelResponseLoginData = modelResponseLogin.getData();
+                    Utility.addPreferences(LoginActivity.this, Constants.keyUserId, "" + modelResponseLoginData.getUser_Id());
+                    Utility.addPreferences(LoginActivity.this, Constants.keyLoginCheck, true);
+                    startActivity(new Intent(this, MainActivity.class));
+                    finishAffinity();
+                    break;
+
+                case "404":
+                    Utility.showToast(LoginActivity.this, "User dose not exist.");
+                    break;
+
+                case "402":
+                    Utility.showToast(LoginActivity.this, "Incorrect Password.");
+                    break;
+            }
+        }
+    }
 }

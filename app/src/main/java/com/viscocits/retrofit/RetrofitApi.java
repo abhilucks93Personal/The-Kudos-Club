@@ -2,18 +2,23 @@ package com.viscocits.retrofit;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.support.v4.app.FragmentActivity;
 
 import com.viscocits.home_post.model.ModelResponseAddComment;
 import com.viscocits.home_post.model.ModelResponseCommon;
 import com.viscocits.home_post.model.ModelResponseCountryFilterList;
 import com.viscocits.home_post.model.ModelResponseEngagementFilterList;
 import com.viscocits.home_post.model.getPostResponse.ModelResponseWallPost;
+import com.viscocits.home_recognize.RecognizeFragment;
 import com.viscocits.home_recognize.model.ModelResponseKudosPoints;
+import com.viscocits.home_recognize.model.ModelResponseLogin;
 import com.viscocits.home_recognize.model.ModelResponsePointsList;
 import com.viscocits.home_recognize.model.ModelResponseReasonsList;
+import com.viscocits.home_recognize.model.ModelResponseRecognitionImage;
 import com.viscocits.home_recognize.model.ModelResponseRecognitionSubmit;
 import com.viscocits.home_recognize.model.ModelResponseUsersList;
 import com.viscocits.home_recognize.model.ModelResponseValuesList;
+import com.viscocits.login.LoginActivity;
 import com.viscocits.utils.Constants;
 import com.viscocits.utils.Utility;
 
@@ -39,6 +44,7 @@ public class RetrofitApi {
         else
             return new RetrofitApi();
     }
+
 
 
     public interface ResponseListener {
@@ -73,7 +79,7 @@ public class RetrofitApi {
                     @Override
                     public void onError(Throwable e) {
 
-                        Utility.showToast(activity, "failed");
+                        Utility.showToast(activity, "failed\n" + e.getMessage());
                         mlistener_response._onError(e);
 
                     }
@@ -105,7 +111,7 @@ public class RetrofitApi {
 
                     @Override
                     public void onError(Throwable e) {
-                        Utility.showToast(activity, "failed");
+                        Utility.showToast(activity, "failed\n" + e.getMessage());
                         mlistener_response._onError(e);
 
                     }
@@ -156,7 +162,7 @@ public class RetrofitApi {
 
                     @Override
                     public void onError(Throwable e) {
-                        Utility.showToast(activity, "failed");
+                        Utility.showToast(activity, "failed\n" + e.getMessage());
                         mlistener_response._onError(e);
 
                     }
@@ -197,7 +203,7 @@ public class RetrofitApi {
                     @Override
                     public void onError(Throwable e) {
                         mProgressDialog.dismiss();
-                        Utility.showToast(activity, "failed");
+                        Utility.showToast(activity, "failed\n" + e.getMessage());
                         mlistener_response._onError(e);
                     }
 
@@ -239,7 +245,7 @@ public class RetrofitApi {
                     @Override
                     public void onError(Throwable e) {
                         mProgressDialog.dismiss();
-                        Utility.showToast(activity, "failed");
+                        Utility.showToast(activity, "failed\n" + e.getMessage());
                         mlistener_response._onError(e);
                     }
 
@@ -283,7 +289,7 @@ public class RetrofitApi {
                     @Override
                     public void onError(Throwable e) {
                         mProgressDialog.dismiss();
-                        Utility.showToast(activity, "failed");
+                        Utility.showToast(activity, "failed\n" + e.getMessage());
                         mlistener_response._onError(e);
                     }
 
@@ -301,7 +307,7 @@ public class RetrofitApi {
                                final ResponseListener _mlistener_response) {
         this.mlistener_response = _mlistener_response;
 
-        String userId = Utility.getPreferences(activity, Constants.P_KEY_USER_ID);
+        String userId = Utility.getPreferences(activity, Constants.keyUserId);
 
         RetrofitClient.getClient().getKudosPoints(Constants.CLIENT_ID, userId)
                 .subscribeOn(Schedulers.newThread())
@@ -314,7 +320,7 @@ public class RetrofitApi {
 
                     @Override
                     public void onError(Throwable e) {
-                        Utility.showToast(activity, "failed");
+                        Utility.showToast(activity, "failed\n" + e.getMessage());
                         mlistener_response._onError(e);
 
                     }
@@ -332,7 +338,7 @@ public class RetrofitApi {
                              final ResponseListener _mlistener_response) {
         this.mlistener_response = _mlistener_response;
 
-        String userId = Utility.getPreferences(activity, Constants.P_KEY_USER_ID);
+        String userId = Utility.getPreferences(activity, Constants.keyUserId);
 
         RetrofitClient.getClient().getUsers(Constants.CLIENT_ID, userId)
                 .subscribeOn(Schedulers.newThread())
@@ -345,7 +351,7 @@ public class RetrofitApi {
 
                     @Override
                     public void onError(Throwable e) {
-                        Utility.showToast(activity, "failed");
+                        Utility.showToast(activity, "failed\n" + e.getMessage());
                         mlistener_response._onError(e);
 
                     }
@@ -374,7 +380,7 @@ public class RetrofitApi {
 
                     @Override
                     public void onError(Throwable e) {
-                        Utility.showToast(activity, "failed");
+                        Utility.showToast(activity, "failed\n" + e.getMessage());
                         mlistener_response._onError(e);
 
                     }
@@ -403,7 +409,7 @@ public class RetrofitApi {
 
                     @Override
                     public void onError(Throwable e) {
-                        Utility.showToast(activity, "failed");
+                        Utility.showToast(activity, "failed\n" + e.getMessage());
                         mlistener_response._onError(e);
 
                     }
@@ -432,7 +438,7 @@ public class RetrofitApi {
 
                     @Override
                     public void onError(Throwable e) {
-                        Utility.showToast(activity, "failed");
+                        Utility.showToast(activity, "failed\n" + e.getMessage());
                         mlistener_response._onError(e);
 
                     }
@@ -457,7 +463,14 @@ public class RetrofitApi {
 
         this.mlistener_response = _mlistener_response;
 
-        String mUserId = Utility.getPreferences(activity, Constants.P_KEY_USER_ID);
+        String mUserId = Utility.getPreferences(activity, Constants.keyUserId);
+
+
+        mProgressDialog = new ProgressDialog(activity);
+        if (!mProgressDialog.isShowing()) {
+            mProgressDialog.setMessage("Please wait...");
+            mProgressDialog.show();
+        }
 
         RetrofitClient.getClient().submitRecognition(userId,
                 reasonId,
@@ -478,13 +491,15 @@ public class RetrofitApi {
 
                     @Override
                     public void onError(Throwable e) {
-                        Utility.showToast(activity, "failed");
+                        mProgressDialog.dismiss();
+                        Utility.showToast(activity, "failed\n" + e.getMessage());
                         mlistener_response._onError(e);
 
                     }
 
                     @Override
                     public void onNext(ModelResponseRecognitionSubmit modelResponseRecognitionSubmit) {
+                        mProgressDialog.dismiss();
                         mlistener_response._onNext(modelResponseRecognitionSubmit);
 
                     }
@@ -492,6 +507,98 @@ public class RetrofitApi {
                 });
 
 
+    }
+
+    public void logIn(final Activity activity,
+                      final ResponseListener _mlistener_response,
+                      String strUserName,
+                      String strPassword) {
+        this.mlistener_response = _mlistener_response;
+
+        mProgressDialog = new ProgressDialog(activity);
+        if (!mProgressDialog.isShowing()) {
+            mProgressDialog.setMessage("Please wait...");
+            mProgressDialog.show();
+        }
+
+        RetrofitClient.getClient().logIn(strUserName,
+                strPassword,
+                Constants.CLIENT_ID
+        )
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ModelResponseLogin>() {
+                    @Override
+                    public void onCompleted() {
+                        mlistener_response._onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mProgressDialog.dismiss();
+                        Utility.showToast(activity, "failed\n" + e.getMessage());
+                        mlistener_response._onError(e);
+
+                    }
+
+                    @Override
+                    public void onNext(ModelResponseLogin modelResponseLogin) {
+                        mProgressDialog.dismiss();
+                        mlistener_response._onNext(modelResponseLogin);
+
+                    }
+
+                });
+
+    }
+
+    public void uploadImageRecognition(final Activity activity,
+                                       final ResponseListener _mlistener_response,
+                                       String encodedImage, long recognitionId) {
+
+        this.mlistener_response = _mlistener_response;
+
+        mProgressDialog = new ProgressDialog(activity);
+        if (!mProgressDialog.isShowing()) {
+            mProgressDialog.setMessage("Uploading image...");
+            mProgressDialog.show();
+        }
+        String name = "";
+        String mUserId = Utility.getPreferences(activity, Constants.keyUserId);
+        RetrofitClient.getClient().uploadImageRecognition(
+                Constants.CLIENT_NAME,
+                name,
+                recognitionId,
+                mUserId,
+                Constants.CLIENT_ID,
+                encodedImage,
+                Constants.MainImageUploadPath,
+                Constants.RecogImageUploadPath
+        )
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ModelResponseRecognitionImage>() {
+                    @Override
+                    public void onCompleted() {
+                        mlistener_response._onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mProgressDialog.dismiss();
+                        Utility.showToast(activity, "failed\n" + e.getMessage());
+                        mlistener_response._onError(e);
+
+                    }
+
+                    @Override
+                    public void onNext(ModelResponseRecognitionImage modelResponseRecognitionImage) {
+                        mProgressDialog.dismiss();
+                        mlistener_response._onNext(modelResponseRecognitionImage);
+
+                    }
+
+                });
     }
 
 }
