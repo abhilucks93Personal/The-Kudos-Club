@@ -346,6 +346,8 @@ public class Utility {
         return text;
     }
 
+
+
     public static Boolean getPreferences(Context context, String key, boolean defaut) {
         SharedPreferences prefs = context.getSharedPreferences("Preferences_", Context.MODE_PRIVATE);
         Boolean text = prefs.getBoolean(key, defaut);
@@ -571,17 +573,20 @@ public class Utility {
         bmp.compress(Bitmap.CompressFormat.JPEG, 80, bytes);
         try {
             file.createNewFile();
+            boolean wasSuccessful = file.createNewFile();
+            if (!wasSuccessful)
+                Log.e("error", "failed");
             FileOutputStream fo = new FileOutputStream(file);
             fo.write(bytes.toByteArray());
             fo.close();
-            File file1 = Compressor.getDefault(context).compressToFile(file);
-            return Uri.fromFile(file1);
+            File file1 = new Compressor(context).compressToFile(file);
+            finalUri = Uri.fromFile(file1);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return finalUri;
-    }*/
-
+    }
+*/
 
     public static String getLoginErrorMessage(int loginType) {
         switch (loginType) {

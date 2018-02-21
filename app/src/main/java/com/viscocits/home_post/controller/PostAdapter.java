@@ -13,15 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.squareup.picasso.Picasso;
 import com.viscocits.R;
 import com.viscocits.home_post.interfac.PostActionListener;
@@ -29,7 +26,6 @@ import com.viscocits.home_post.model.ModelResponseAddComment;
 import com.viscocits.home_post.model.ModelResponseCommon;
 import com.viscocits.home_post.model.postModels.ModelPostMergedData;
 import com.viscocits.home_post.view.ImageListActivity;
-import com.viscocits.other.CircleTransform;
 import com.viscocits.retrofit.RetrofitApi;
 import com.viscocits.utils.Constants;
 import com.viscocits.utils.GlideHelper;
@@ -62,6 +58,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         LinearLayout llLiked, llPostImage2, llPostImagesMain;
         View convertView;
         EditText etComment;
+        RelativeLayout rlImage4;
 
         MyViewHolder(View view) {
             super(view);
@@ -88,6 +85,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             ivSpam = (ImageView) view.findViewById(R.id.iv_spam);
             rvComments = (RecyclerView) view.findViewById(R.id.rv_comments);
             etComment = (EditText) view.findViewById(R.id.et_comment);
+            rlImage4 = view.findViewById(R.id.rl_image4);
         }
     }
 
@@ -212,14 +210,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
         setPostImages(postImages, holder.llPostImagesMain, holder.ivMainImage1
                 , holder.ivMainImage2, holder.llPostImage2, holder.ivMainImage3
-                , holder.ivMainImage4, holder.tvMore);
+                , holder.rlImage4, holder.ivMainImage4, holder.tvMore);
 
         holder.ivMainImage1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, ImageListActivity.class)
-                        .putExtra("pos", 1)
-                        .putExtra("urls", postImages));
+                if (postImages.size() > 1)
+                    context.startActivity(new Intent(context, ImageListActivity.class)
+                            .putExtra("pos", 1)
+                            .putExtra("urls", postImages));
+                else
+                    context.startActivity(new Intent(context, ZoomMultiImageClass.class)
+                            .putStringArrayListExtra("urls", postImages)
+                            .putExtra("pos", position));
             }
         });
 
@@ -458,12 +461,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
     private void setPostImages(ArrayList<String> postImages, LinearLayout llPostImagesMain
             , ImageView ivMainImage1, ImageView ivMainImage2, LinearLayout llPostImage2
-            , ImageView ivMainImage3, ImageView ivMainImage4, TextView tvMore) {
+            , ImageView ivMainImage3, RelativeLayout rlImage4, ImageView ivMainImage4, TextView tvMore) {
         ivMainImage1.setVisibility(View.GONE);
         ivMainImage2.setVisibility(View.GONE);
         ivMainImage3.setVisibility(View.GONE);
-        ivMainImage4.setVisibility(View.GONE);
-        tvMore.setVisibility(View.GONE);
+        rlImage4.setVisibility(View.GONE);
+
         llPostImage2.setVisibility(View.GONE);
 
 
@@ -527,13 +530,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                         .placeholder(R.color.colorBlack)
                         .error(R.color.colorBlack)
                         .into(ivMainImage2);
-                Picasso.with(context).load(postImages.get(2)).into(ivMainImage3);
+                Picasso.with(context)
+                        .load(postImages.get(2))
+                        .placeholder(R.color.colorBlack)
+                        .error(R.color.colorBlack)
+                        .into(ivMainImage3);
                 ivMainImage1.setVisibility(View.VISIBLE);
                 ivMainImage2.setVisibility(View.VISIBLE);
                 llPostImage2.setVisibility(View.VISIBLE);
                 ivMainImage3.setVisibility(View.VISIBLE);
-                ivMainImage4.setVisibility(View.VISIBLE);
-                tvMore.setVisibility(View.GONE);
+                rlImage4.setVisibility(View.GONE);
                 break;
 
             case 4:
@@ -563,6 +569,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                 ivMainImage2.setVisibility(View.VISIBLE);
                 llPostImage2.setVisibility(View.VISIBLE);
                 ivMainImage3.setVisibility(View.VISIBLE);
+                rlImage4.setVisibility(View.VISIBLE);
                 ivMainImage4.setVisibility(View.VISIBLE);
                 tvMore.setVisibility(View.GONE);
                 break;
@@ -594,7 +601,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                 ivMainImage2.setVisibility(View.VISIBLE);
                 llPostImage2.setVisibility(View.VISIBLE);
                 ivMainImage3.setVisibility(View.VISIBLE);
-                ivMainImage4.setVisibility(View.VISIBLE);
+                rlImage4.setVisibility(View.VISIBLE);
                 tvMore.setVisibility(View.VISIBLE);
                 tvMore.setText("+" + (postImages.size() - 4));
                 break;

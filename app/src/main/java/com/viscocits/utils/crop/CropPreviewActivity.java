@@ -36,7 +36,7 @@ public class CropPreviewActivity extends Activity {
         setContentView(R.layout.activity_crop_result);
 
         ImageView imageView = findViewById(R.id.resultImageView);
-        imageView = findViewById(R.id.resultImageView);
+       // imageView = findViewById(R.id.resultImageView);
         imageView.setBackgroundResource(R.color.colorWhite);
         TextView tv_ok = findViewById(R.id.crop_preview_tv_ok);
         tv_ok.setOnClickListener(new View.OnClickListener() {

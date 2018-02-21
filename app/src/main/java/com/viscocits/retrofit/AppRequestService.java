@@ -112,7 +112,7 @@ public interface AppRequestService {
                                          @Field("ClientID") String clientId);
 
     @FormUrlEncoded
-    @POST("UserLogin")
+    @POST("UploadRecognitionImages")
     Observable<ModelResponseRecognitionImage>  uploadImageRecognition(@Field("ClientName") String clientName,
                                                                       @Field("F_Name")  String name,
                                                                       @Field("RecogID") long recognitionId,

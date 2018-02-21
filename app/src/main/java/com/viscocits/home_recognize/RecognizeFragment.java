@@ -19,6 +19,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,7 @@ import com.viscocits.utils.Utility;
 import com.viscocits.utils.crop.CropActivity;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -325,7 +327,7 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
         } else if (obj instanceof ModelResponseRecognitionSubmit) {
             ModelResponseRecognitionSubmit modelResponseRecognitionSubmit = (ModelResponseRecognitionSubmit) obj;
             if (modelResponseRecognitionSubmit.getStatusCode().equals(Constants.STATUS_CODE_SUCCESS)) {
-                Utility.addPreferences(getActivity(),Constants.isPostUpdated,true);
+                Utility.addPreferences(getActivity(), Constants.isPostUpdated, true);
                 recognitionId = modelResponseRecognitionSubmit.getData();
                 showImageDialog();
 
@@ -506,11 +508,18 @@ public class RecognizeFragment extends Fragment implements View.OnClickListener,
             dialog.dismiss();
         }
 
+        File file = new File(mImageUri.getPath());
+        long length = file.length();
+        length = length / 1024;
+        Utility.showToast(getActivity(), "" + length);
+        Log.d("length", "" + length);
+
         final InputStream imageStream;
         try {
             imageStream = getActivity().getContentResolver().openInputStream(mImageUri);
             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
             String encodedImage = encodeImage(selectedImage);
+
             RetrofitApi.getInstance().uploadImageRecognition(getActivity(), this, encodedImage, recognitionId);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

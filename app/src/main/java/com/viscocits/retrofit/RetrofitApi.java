@@ -22,6 +22,8 @@ import com.viscocits.login.LoginActivity;
 import com.viscocits.utils.Constants;
 import com.viscocits.utils.Utility;
 
+import java.util.Random;
+
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -563,7 +565,7 @@ public class RetrofitApi {
             mProgressDialog.setMessage("Uploading image...");
             mProgressDialog.show();
         }
-        String name = "";
+        String name = "Image" + new Random().nextInt() + ".png";
         String mUserId = Utility.getPreferences(activity, Constants.keyUserId);
         RetrofitClient.getClient().uploadImageRecognition(
                 Constants.CLIENT_NAME,
